@@ -36,7 +36,7 @@ TOP := $(dir $(lastword $(MAKEFILE_LIST)))..
 include $(TOP)/src/common.inc
 
 TARGETS = libvmem libvmmalloc
-ALL_TARGETS = $(TARGETS) common examples
+ALL_TARGETS = $(TARGETS) common
 POSSIBLE_TARGETS = $(TARGETS) common examples
 
 SCOPE_DIRS = $(TARGETS) common
