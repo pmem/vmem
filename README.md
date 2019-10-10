@@ -51,7 +51,9 @@ For information on how these libraries are licensed, see our [LICENSE](LICENSE) 
 
 ## Pre-Built Packages for Windows
 
-The recommended and easiest way to install VMEM on Windows is to use Microsoft vcpkg. Vcpkg is an open source tool and ecosystem created for library management.
+(Not yet available.)
+
+The recommended and easiest way to install VMEM on Windows ~~is~~will be to use Microsoft vcpkg. Vcpkg is an open source tool and ecosystem created for library management.
 
 To install the latest VMEM release and link it to your Visual Studio solution you first need to clone and set up vcpkg on your machine as described on the [vcpkg github page](https://github.com/Microsoft/vcpkg) in **Quick Start** section.
 
