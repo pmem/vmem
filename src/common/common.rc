@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017, Intel Corporation
+ * Copyright 2016-2019, Intel Corporation
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -88,10 +88,10 @@ BEGIN
 			VALUE "CompanyName", "Intel"
 			VALUE "FileDescription", DESCRIPTION
 			VALUE "FileVersion", SRCVERSION
-			VALUE "InternalName", "PMDK"
-			VALUE "LegalCopyright", "Copyright 2014-2017, Intel Corporation"
+			VALUE "InternalName", "VMEM"
+			VALUE "LegalCopyright", "Copyright 2014-2019, Intel Corporation"
 			VALUE "OriginalFilename", FILE_NAME
-			VALUE "ProductName", "Persistent Memory Development Kit"
+			VALUE "ProductName", "Volatile Memory Development Kit"
 			VALUE "ProductVersion", SRCVERSION
 #if VERSION_SPECIAL == VS_FF_SPECIALBUILD
 			VALUE "SpecialBuild", VERSION_CUSTOM_MSG
