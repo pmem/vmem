@@ -78,17 +78,12 @@ OBJS +=\
 	$(TOP)/src/nondebug/common/out.o\
 	$(TOP)/src/nondebug/common/pool_hdr.o\
 	$(TOP)/src/nondebug/common/util.o\
-	$(TOP)/src/nondebug/common/util_posix.o\
-#	$(TOP)/src/nondebug/common/uuid.o\
-#	$(call osdep, $(TOP)/src/nondebug/common/uuid,.o)
+	$(TOP)/src/nondebug/common/util_posix.o_
 
 INCS += -I$(TOP)/src/common
 endif
 
 ifeq ($(LIBPMEMCOMMON), internal-debug)
-#vpath %.c $(TOP)/src/common
-#vpath %.h $(TOP)/src/common
-
 OBJS +=\
 	$(TOP)/src/debug/common/file.o\
 	$(TOP)/src/debug/common/file_posix.o\
