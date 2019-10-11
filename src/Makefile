@@ -42,11 +42,9 @@ POSSIBLE_TARGETS = $(TARGETS) common examples
 SCOPE_DIRS = $(TARGETS) common
 
 DEBUG_RELEASE_TARGETS = common libvmem libvmmalloc
-RELEASE_TARGETS = examples
 
 ifneq ($(BUILD_EXAMPLES),n)
 	ALL_TARGETS += examples
-	RELEASE_TARGETS += examples
 endif
 
 CLEAN_NO_JE_TARGETS = $(POSSIBLE_TARGETS)
@@ -149,9 +147,6 @@ $(DEBUG_RELEASE_TARGETS):
 ifeq ($(custom_build),)
 	$(MAKE) -C $@ DEBUG=1
 endif
-
-$(RELEASE_TARGETS):
-	$(MAKE) -C $@
 
 jemalloc-check: jemalloc-test
 
