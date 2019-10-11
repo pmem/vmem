@@ -11,7 +11,7 @@
 # Appended to TEST_DIR to test PMDK with file path longer than 255
 # characters.
 #
-# LONGDIR="LoremipsumdolorsitametconsecteturadipiscingelitVivamuslacinianibhattortordictumsollicitudinNullamvariusvestibulumligulaetegestaselitsemperidMaurisultriciesligulaeuipsumtinciduntluctusMorbimaximusvariusdolorid"
+# LONGDIR="PhngluimglwnafhCthulhuRlyehwgahnaglfhtagnHaizhronaDagonhaiepngmnahnhriikadishtugnaiihcuhesyhahfgnaiihsgnwahlnogsgnwahlnghahaiChaugnarFaugnhlirghHshtungglingnogRlyehnghaogShub-NiggurathothhgofnnlloigshuggsllhannnCthulhuahnyth"
 # DIRSUFFIX="$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR"
 #
 

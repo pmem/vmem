@@ -39,7 +39,7 @@ set -e
 
 # Configure tests
 cat << EOF > $WORKDIR/src/test/testconfig.sh
-LONGDIR=LoremipsumdolorsitametconsecteturadipiscingelitVivamuslacinianibhattortordictumsollicitudinNullamvariusvestibulumligulaetegestaselitsemperidMaurisultriciesligulaeuipsumtinciduntluctusMorbimaximusvariusdolorid
+LONGDIR=PhngluimglwnafhCthulhuRlyehwgahnaglfhtagnHaizhronaDagonhaiepngmnahnhriikadishtugnaiihcuhesyhahfgnaiihsgnwahlnogsgnwahlnghahaiChaugnarFaugnhlirghHshtungglingnogRlyehnghaogShub-NiggurathothhgofnnlloigshuggsllhannnCthulhuahnyth
 # this path is ~3000 characters long
 DIRSUFFIX="$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR"
 TEST_DIR=/tmp
