@@ -20,7 +20,7 @@ Summary:	__PACKAGE_SUMMARY__
 Packager:	__PACKAGE_MAINTAINER__
 Group:		__GROUP_SYS_LIBS__
 License:	__LICENSE__
-URL:		http://pmem.io/pmdk
+URL:		http://pmem.io/vmem
 
 Source0:	%{name}-%{version}.tar.gz
 

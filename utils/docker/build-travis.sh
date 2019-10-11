@@ -32,9 +32,9 @@
 
 #
 # build-travis.sh - runs a Docker container from a Docker image with environment
-#                   prepared for building PMDK project and starts building PMDK
+#                   prepared for building VMEM project and starts building VMEM
 #
-# this script is for building PMDK on Travis only
+# this script is for building VMEM on Travis only
 #
 
 set -e
@@ -63,7 +63,7 @@ fi
 
 if [[ -z "$HOST_WORKDIR" ]]; then
 	echo "ERROR: The variable HOST_WORKDIR has to contain a path to " \
-		"the root of the PMDK project on the host machine"
+		"the root of the VMEM project on the host machine"
 	exit 1
 fi
 
@@ -72,7 +72,7 @@ if [[ -z "$TEST_BUILD" ]]; then
 fi
 
 imageName=${DOCKERHUB_REPO}:1.7-${OS}-${OS_VER}
-containerName=pmdk-${OS}-${OS_VER}
+containerName=vmem-${OS}-${OS_VER}
 
 if [[ $MAKE_PKG -eq 0 ]] ; then command="./run-build.sh"; fi
 if [[ $MAKE_PKG -eq 1 ]] ; then command="./run-build-package.sh"; fi
@@ -91,12 +91,12 @@ if [[ ! "${VALID_BRANCHES[@]}" =~ "${TRAVIS_BRANCH}" || "$TRAVIS_PULL_REQUEST" !
 	AUTO_DOC_UPDATE=0
 fi
 
-WORKDIR=/pmdk
+WORKDIR=/vmem
 SCRIPTSDIR=$WORKDIR/utils/docker
 
 # Run a container with
 #  - environment variables set (--env)
-#  - host directory containing PMDK source mounted (-v)
+#  - host directory containing VMEM source mounted (-v)
 #  - working directory set (-w)
 docker run --rm --privileged=true --name=$containerName -ti \
 	$DNS_SETTING \
@@ -104,8 +104,8 @@ docker run --rm --privileged=true --name=$containerName -ti \
 	--env http_proxy=$http_proxy \
 	--env https_proxy=$https_proxy \
 	--env AUTO_DOC_UPDATE=$AUTO_DOC_UPDATE \
-	--env CC=$PMDK_CC \
-	--env CXX=$PMDK_CXX \
+	--env CC=$VMEM_CC \
+	--env CXX=$VMEM_CXX \
 	--env VALGRIND=$VALGRIND \
 	--env EXTRA_CFLAGS=$EXTRA_CFLAGS \
 	--env EXTRA_CXXFLAGS=$EXTRA_CXXFLAGS \

@@ -33,7 +33,7 @@
 
 #
 # Used to check whether all the commit messages in a pull request
-# follow the GIT/PMDK guidelines.
+# follow the GIT/VMEM guidelines.
 #
 # usage: ./check-commits.sh [range]
 #

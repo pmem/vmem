@@ -32,7 +32,7 @@
 
 #
 # configure-tests.sh - is called inside a Docker container; configures tests
-#                      and ssh server for use during build of PMDK project.
+#                      and ssh server for use during build of VMEM project.
 #
 
 set -e

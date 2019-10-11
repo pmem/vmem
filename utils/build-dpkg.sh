@@ -266,8 +266,8 @@ Section: debug
 Priority: optional
 Architecture: any
 Depends: libvmem (=\${binary:Version}), libvmmalloc (=\${binary:Version}), \${misc:Depends}
-Description: Debug symbols for PMDK libraries
- Debug symbols for all PMDK libraries.
+Description: Debug symbols for VMEM libraries
+ Debug symbols for all VMEM libraries.
 EOF
 
 cp LICENSE debian/copyright

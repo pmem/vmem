@@ -37,9 +37,9 @@ instructions are outlined below.
 
 ## Libraries
 Available Libraries:
-- [libvmem](http://pmem.io/pmdk/libvmem/):  turns a pool of persistent memory into a volatile memory pool, similar to the system heap but kept separate and with its own malloc-style API.
+- [libvmem](http://pmem.io/vmem/libvmem/):  turns a pool of persistent memory into a volatile memory pool, similar to the system heap but kept separate and with its own malloc-style API.
 
-- [libvmmalloc](http://pmem.io/pmdk/libvmmalloc/)<sup>1</sup>:  transparently converts all the dynamic memory allocations into persistent memory allocations.
+- [libvmmalloc](http://pmem.io/vmem/libvmmalloc/)<sup>1</sup>:  transparently converts all the dynamic memory allocations into persistent memory allocations.
 
 Currently these libraries only work on 64-bit Linux, Windows<sup>2</sup>, and 64-bit FreeBSD 11+.
 For information on how these libraries are licensed, see our [LICENSE](LICENSE) file.
@@ -186,7 +186,7 @@ This call requires the following dependencies: **pandoc**. Pandoc is provided by
 ```
 	$ make source DESTDIR=some_path
 ```
-For this example, it will be installed at $(DESTDIR)/pmdk.
+For this example, it will be installed at $(DESTDIR).
 
 **Build rpm packages** on rpm-based distributions is done by:
 ```

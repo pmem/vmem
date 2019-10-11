@@ -3,7 +3,7 @@ layout: manual
 Content-Style: 'text/css'
 title: _MP(LIBVMMALLOC, 7)
 collection: libvmmalloc
-header: PMDK
+header: VMEM
 date: vmmalloc API version 1.1
 ...
 

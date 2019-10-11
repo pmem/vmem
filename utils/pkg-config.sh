@@ -36,10 +36,10 @@ PACKAGE_NAME="vmem"
 PACKAGE_MAINTAINER="Marcin Slusarz <marcin.slusarz@intel.com>"
 
 # Brief description of the package
-PACKAGE_SUMMARY="Persistent Memory Development Kit"
+PACKAGE_SUMMARY="Volatile Persistent Memory Allocator"
 
 # Full description of the package
-PACKAGE_DESCRIPTION="The collection of libraries and utilities for Persistent Memory Programming"
+PACKAGE_DESCRIPTION="The collection of libraries for volatile use case for persistent memory"
 
 # Website
-PACKAGE_URL="http://pmem.io/pmdk"
+PACKAGE_URL="http://pmem.io/vmem"

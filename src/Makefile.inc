@@ -28,7 +28,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# src/Makefile.inc -- common Makefile rules for PMDK
+# src/Makefile.inc -- common Makefile rules for VMEM
 #
 
 TOP := $(dir $(lastword $(MAKEFILE_LIST)))..
@@ -124,7 +124,7 @@ endif
 # On FreeBSD libvmmalloc defines pthread_create, which conflicts with asan
 tsanitize := $(SANITIZE)
 ifeq ($(OS_KERNEL_NAME),FreeBSD)
-ifeq ($(JEMALLOC_PMDKDIR),libvmmalloc)
+ifeq ($(JEMALLOC_VMEMDIR),libvmmalloc)
 hasaddrcomma := address,
 tsanitize := $(subst address,,$(subst $(hasaddrcomma),,$(SANITIZE)))
 ifneq ($(tsanitize),$(SANITIZE))
@@ -158,7 +158,7 @@ endif
 define arch32_error_msg
 
 ##################################################
-###  32-bit builds of PMDK are not supported!  ###
+###  32-bit builds of VMEM are not supported!  ###
 ###  Please, use 64-bit platform/compiler.     ###
 ##################################################
 

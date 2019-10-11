@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright 2016-2017, Intel Corporation
+# Copyright 2016-2019, Intel Corporation
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
 #
 # prepare-for-build.sh - is called inside a Docker container; prepares
 #                        the environment inside a Docker container for
-#                        running build of PMDK project.
+#                        running build of VMEM project.
 #
 
 set -e
