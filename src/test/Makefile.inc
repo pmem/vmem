@@ -78,7 +78,7 @@ OBJS +=\
 	$(TOP)/src/nondebug/common/out.o\
 	$(TOP)/src/nondebug/common/pool_hdr.o\
 	$(TOP)/src/nondebug/common/util.o\
-	$(TOP)/src/nondebug/common/util_posix.o_
+	$(TOP)/src/nondebug/common/util_posix.o
 
 INCS += -I$(TOP)/src/common
 endif
