@@ -37,7 +37,6 @@ export LC_ALL="C"
 #export LC_ALL="en_US.UTF-8"
 
 . ../testconfig.sh
-. ../envconfig.sh
 
 if [ -t 1 ]; then
 	IS_TERMINAL_STDOUT=YES
