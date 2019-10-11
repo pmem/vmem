@@ -42,13 +42,6 @@
 #DEVICE_DAX_PATH=(/dev/dax0.0 /dev/dax1.0)
 
 #
-# Overwrite default test type:
-# check (default), short, medium, long, all
-# where: check = short + medium; all = short + medium + long
-#
-#TEST_TYPE=check
-
-#
 # Overwrite available build types:
 # debug, nondebug, static-debug, static-nondebug, all (default)
 #
