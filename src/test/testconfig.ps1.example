@@ -23,13 +23,6 @@
 #$Env:TEST_DIR = "\temp"
 
 #
-# Overwrite default test type:
-# check (default), short, medium, long, all
-# where: check = short + medium; all = short + medium + long
-#
-#$Env:TEST_TYPE = "check"
-
-#
 # Overwrite available build types:
 # debug, nondebug, static-debug, static-nondebug, all (default)
 #

@@ -1,5 +1,5 @@
 ﻿#
-# Copyright 2015-2018, Intel Corporation
+# Copyright 2015-2019, Intel Corporation
 # Copyright (c) 2016, Microsoft Corporation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -44,14 +44,6 @@ Param(
     [alias("b")]
     [ValidateSet("all", "debug", "nondebug")]
     [string]$buildtype = "all",
-
-    [alias("t")]
-    [ValidateSet("check", "short", "medium", "long", "all")]
-    [string]$testtype = "check",
-
-    [alias("f")]
-    [ValidateSet("pmem", "non-pmem", "any", "none", "all")]
-    [string]$fstype = "all",
 
     [alias("o")]
     [ValidateScript({
@@ -104,34 +96,23 @@ if($help) {
 
 Write-Verbose "Options: -v $(if ($dryrun) {"-n"})"
 Write-Verbose "    build-type: $buildtype"
-Write-Verbose "    test-type: $testtype"
-Write-Verbose "    fs-type: $fstype"
 Write-Verbose "    check-pool: $(if ($check_pool -eq "1") {"yes"} else {"no"})"
 
 $config = New-Object Config
 
 
 $config.setBuildtype($buildtype)
-$config.setFstype($fstype)
 $config.setTimeout($time)
 $config.setTestdir($testdir)
-$config.testtype = $testtype
 $config.check_pool = $check_pool
 $config.skip_dir = $skip_dir
 $config.testfile = $testfile
 $config.verbose = $VerbosePreference
 
-if ($config.testtype -eq "check") {
-    Register-EngineEvent -SourceIdentifier "timeout-reset" -Action {
-        $Global:stopwatch = [diagnostics.stopwatch]::StartNew()
-    } | Out-Null
+Register-EngineEvent -SourceIdentifier "timeout-reset" -Action {
     $Global:stopwatch = [diagnostics.stopwatch]::StartNew()
-} else {
-    # disable timeout
-    $config.setTimeout(0)
-    $Global:stopwatch = [diagnostics.stopwatch]::StartNew()
-    $Global:stopwatch.Stop()
-}
+} | Out-Null
+$Global:stopwatch = [diagnostics.stopwatch]::StartNew()
 # script blocks - job's start functions
 
 $sb_ST = {

@@ -10,8 +10,8 @@ memory, for example) and must be created by hand in each repo as it makes no
 sense to check in that configuration description to the main repo.
 
 testconfig.sh.example provides more detail.  The script RUNTESTS, when run with
-no arguments, will run all unit tests through all the combinations of fs-types
-and build-types, running the "check" level test.
+no arguments, will run all unit tests through all build-types, running the
+"check" level test.
 
 
 DETAILS ON HOW TO RUN UNIT TESTS

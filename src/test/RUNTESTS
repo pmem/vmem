@@ -42,7 +42,7 @@ usage()
 {
 	[ "$1" ] && echo Error: $1
 	cat >&2 <<EOF
-Usage: $0 [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-type ]
+Usage: $0 [ -hnv ] [ -b build-type ]
 		[ -o timeout ] [ -s test-file | -u test-sequence ] [-k skip-dir ]
 		[ -m memcheck ] [-p pmemcheck ] [ -e helgrind ] [ -d drd ] [ -c ]
 		[ -q provider ] [ -r persistency-method ]
@@ -52,12 +52,7 @@ Usage: $0 [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-type ]
 -v			be verbose
 -b build-type		run only specified build type
 			build-type: debug, nondebug, static-debug, static-nondebug, all (default)
--t test-type		run only specified test type
-			test-type: check (default), short, medium, long, all
-			where: check = short + medium; all = short + medium + long
 -k skip-dir		skip a specific test directory
--f fs-type		run tests only on specified file systems
-			fs-type: pmem, non-pmem, any, none, all (default)
 -o timeout		set timeout for test execution
 			timeout: floating point number with an optional suffix: 's' for seconds
 			(the default), 'm' for minutes, 'h' for hours or 'd' for days.
@@ -106,7 +101,7 @@ runtest_local() {
 		echo "(in ./$RUNTEST_DIR) $RUNTEST_PARAMS ./$RUNTEST_SCRIPT"
 	elif [ "$use_timeout" -a "$testtype" = "check" ]
 	then
-		# set timeout for "check" tests
+		# set timeout tests
 		[ "$verbose" ] && echo "RUNTESTS: Running: (in ./$RUNTEST_DIR) \
 			$RUNTEST_PARAMS ./$RUNTEST_SCRIPT"
 		CMD_STR="$RUNTEST_EXTRA VERBOSE=$verbose $RUNTEST_PARAMS timeout \
@@ -156,8 +151,6 @@ runtest_local() {
 # load_default_global_test_configuration -- load a default global configuration
 #
 load_default_global_test_configuration() {
-	global_req_testtype=all
-	global_req_fstype=all
 	global_req_buildtype=all
 	global_req_provider=none
 	global_req_pmethod=none
@@ -200,8 +193,6 @@ read_global_test_configuration() {
 
 	. config.sh
 
-	[ -n "$CONF_GLOBAL_TEST_TYPE" ] && global_req_testtype=$CONF_GLOBAL_TEST_TYPE
-	[ -n "$CONF_GLOBAL_FS_TYPE" ] && global_req_fstype=$CONF_GLOBAL_FS_TYPE
 	[ -n "$CONF_GLOBAL_BUILD_TYPE" ] && global_req_buildtype=$CONF_GLOBAL_BUILD_TYPE
 	[ -n "$CONF_GLOBAL_RPMEM_PROVIDER" ] && global_req_provider=$CONF_GLOBAL_RPMEM_PROVIDER
 	[ -n "$CONF_GLOBAL_RPMEM_PMETHOD" ] && global_req_pmethod=$CONF_GLOBAL_RPMEM_PMETHOD
@@ -216,15 +207,11 @@ read_global_test_configuration() {
 #	usage: read_test_configuration <test-id>
 #
 read_test_configuration() {
-	req_testtype=$global_req_testtype
-	req_fstype=$global_req_fstype
 	req_buildtype=$global_req_buildtype
 	req_provider=$global_req_provider
 	req_pmethod=$global_req_pmethod
 	req_timeout=$global_req_timeout
 
-	[ -n "${CONF_TEST_TYPE[$1]}" ] && req_testtype=${CONF_TEST_TYPE[$1]}
-	[ -n "${CONF_FS_TYPE[$1]}" ] && req_fstype=${CONF_FS_TYPE[$1]}
 	[ -n "${CONF_BUILD_TYPE[$1]}" ] && req_buildtype=${CONF_BUILD_TYPE[$1]}
 	[ -n "${CONF_RPMEM_PROVIDER[$1]}" ] && req_provider=${CONF_RPMEM_PROVIDER[$1]}
 	[ -n "${CONF_RPMEM_PMETHOD[$1]}" ] && req_pmethod=${CONF_RPMEM_PMETHOD[$1]}
@@ -235,8 +222,6 @@ read_test_configuration() {
 	fi
 
 	special_params=
-	[ "$req_fstype" == "none" -o "$req_fstype" == "any" ] && \
-		special_params="req_fs_type=1"
 
 	return 0
 }
@@ -314,27 +299,6 @@ runtest() {
 		local sid=${runscript#TEST}
 		read_test_configuration $sid
 
-		local _testtype="$testtype"
-		# unwind check test type to its subtypes
-		[ "$_testtype" == "check" ] && _testtype="short medium"
-		[ "$_testtype" == "all" ] && _testtype="short medium long"
-
-		ttype=$(intersection "$_testtype" "$req_testtype" "short medium long")
-		[ -z "$ttype" ] && {
-			echo "$UNITTEST_NAME: SKIP test-type $testtype ($req_testtype required)"
-			continue
-		}
-		# collapse test type to check if its valid superset
-		[ "$ttype" == "short medium" ] && ttype="check"
-		[ "$ttype" == "short medium long" ] && ttype="all"
-
-		# check if output test type is single value
-		ttype_array=($ttype)
-		[ "${#ttype_array[@]}" -gt 1 ] && {
-			echo "$UNITTEST_NAME: multiple test types ($ttype)"
-			exit 1
-		}
-
 		builds=$(intersection "$buildtype" "$req_buildtype" "debug nondebug static-debug static-nondebug")
 		provs=$(intersection "$provider" "$req_provider" "verbs sockets")
 		pmeths=$(intersection "$pmethod" "$req_pmethod" "GPSPM APM")
@@ -343,7 +307,7 @@ runtest() {
 		for build in $builds
 		do
 			export RUNTEST_DIR=$1
-			export RUNTEST_PARAMS="TEST=$ttype FS=$fs BUILD=$build"
+			export RUNTEST_PARAMS="BUILD=$build"
 			export RUNTEST_EXTRA="CHECK_TYPE=$checktype CHECK_POOL=$check_pool \
 				$special_params"
 			export RUNTEST_SCRIPT="$runscript"
@@ -401,8 +365,6 @@ EOF
 # defaults...
 #
 def_buildtype=all
-testtype=check
-fstype=all
 provider=all
 pmethod=all
 testconfig="./testconfig.sh"
@@ -471,34 +433,6 @@ do
 			;;
 		esac
 		shift 2
-		;;
-	-t)
-		testtype="$2"
-		shift 2
-		case "$testtype"
-		in
-		short|medium|long|check|all)
-			;;
-		*)
-			usage "bad test-type: $testtype"
-			;;
-		esac
-		;;
-	-f)
-		fstype="$2"
-		shift 2
-		case "$fstype"
-		in
-		none|pmem|non-pmem|any)
-			# necessary to treat "any" as either pmem or non-pmem with "-f"
-			export FORCE_FS=1
-			;;
-		all)
-			;;
-		*)
-			usage "bad fs-type: $fstype"
-			;;
-		esac
 		;;
 	-m)
 		receivetype="$2"
@@ -661,8 +595,6 @@ done
 	[ "$verbose" ] && echo -n ' -v'
 	echo
 	echo "    build-type: $buildtype"
-	echo "    test-type: $testtype"
-	echo "    fs-type: $fstype"
 	echo "    check-type: $checktype"
 	if [ "$check_pool" ]
 	then
