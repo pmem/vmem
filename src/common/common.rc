@@ -91,7 +91,7 @@ BEGIN
 			VALUE "InternalName", "VMEM"
 			VALUE "LegalCopyright", "Copyright 2014-2019, Intel Corporation"
 			VALUE "OriginalFilename", FILE_NAME
-			VALUE "ProductName", "Volatile Memory Development Kit"
+			VALUE "ProductName", "Volatile Persistent Memory Allocator"
 			VALUE "ProductVersion", SRCVERSION
 #if VERSION_SPECIAL == VS_FF_SPECIALBUILD
 			VALUE "SpecialBuild", VERSION_CUSTOM_MSG
