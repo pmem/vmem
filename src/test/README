@@ -59,16 +59,12 @@ file system type, and build type to test.
 
 RUNTESTS takes options to limit what it runs.  The usage is:
 
- RUNTESTS [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-type ]
+ RUNTESTS [ -hnv ] [ -b build-type ]
 	    [ -o timeout ] [ -s test-file ] [ -k skip-dir ]
 	    [ -m memcheck ] [-p pmemcheck ] [ -e helgrind ] [ -d drd ] [ -c ]
-	    [ -q provider ] [ -r persistency-method ]
 	    [tests...]
 
  Build types are: debug, nondebug, static-debug, static-nondebug, all (default)
- Test types are: check (default), short, medium, long, all
-		 where: check = short + medium; all = short + medium + long
- File system types are: none, pmem, non-pmem, any, all (default)
  Timeout is: a floating point number with an optional suffix: 's' for seconds
 		 (the default), 'm' for minutes, 'h' for hours or 'd' for days.
 		 Default value is 3 minutes.
@@ -78,13 +74,11 @@ RUNTESTS takes options to limit what it runs.  The usage is:
 		 auto (default, enable/disable based on test requirements),
 		 force-enable (enable when test does not require given valgrind tool,
 		 but obey test's explicit tool disable)
- Providers are: verbs, sockets, all (default)
- Persistency methods are: GPSPM, APM, all (default)
 
 For example:
 
 	$ RUNTESTS -b debug blk_nblock -s TEST0
-	blk_nblock/TEST0: SETUP (check/pmem/debug)
+	blk_nblock/TEST0: SETUP (check/debug)
 	blk_nblock/TEST0: START: blk_nblock
 	blk_nblock/TEST0: PASS
 
@@ -99,17 +93,17 @@ an issue.  Just running the script, like this:
 
 will use default values for the environment, namely:
 
-	TEST=check FS=any BUILD=debug
+	BUILD=debug
 
 these defaults can be overridden on the command line:
 
 	$ cd blk_nblock
-	$ TEST=check FS=any BUILD=nondebug ./TEST0
+	$ BUILD=nondebug ./TEST0
 
 The above example runs TEST0 with the nondebug library, just as using
 RUNTESTS with "-b nondebug" would from the parent directory.
 
-In addition to overriding TEST, FS, and BUILD environment variables, the
+In addition to overriding BUILD environment variable, the
 unit test framework also looks for several other variables:
 
 	For tests that run a local program, insert the word "echo" in front

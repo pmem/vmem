@@ -194,8 +194,7 @@ endif
 ifneq ($(SOURCE),)
 _OBJS = $(SOURCE:.c=.o)
 _OBJS_COMMON = $(patsubst $(COMMON)/%, %, $(_OBJS))
-_OBJS_RPMEM_COMMON = $(patsubst $(RPMEM_COMMON)/%, %, $(_OBJS_COMMON))
-OBJS += $(addprefix $(objdir)/, $(_OBJS_RPMEM_COMMON))
+OBJS += $(addprefix $(objdir)/, $(_OBJS_COMMON))
 endif
 
 ifneq ($(HEADERS),)

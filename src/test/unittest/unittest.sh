@@ -1516,10 +1516,7 @@ function setup() {
 		MCSTR=""
 	fi
 
-	[ -n "$RPMEM_PROVIDER" ] && PROV="/$RPMEM_PROVIDER"
-	[ -n "$RPMEM_PM" ] && PM="/$RPMEM_PM"
-
-	msg "$UNITTEST_NAME: SETUP ($TEST/$BUILD$MCSTR$PROV$PM)"
+	msg "$UNITTEST_NAME: SETUP ($TEST/$BUILD$MCSTR)"
 
 	for f in $(get_files ".*[a-zA-Z_]${UNITTEST_NUM}\.log"); do
 		rm -f $f
