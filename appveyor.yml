@@ -11,8 +11,7 @@ configuration:
 - Release
 
 environment:
-  solutionname: PMDK.sln
-  ex_solutionname: Examples.sln
+  solutionname: VMEM.sln
 
 matrix:
   fast_finish: true
@@ -44,7 +43,6 @@ before_build:
 
 build_script:
 - ps: msbuild src\$Env:solutionname /property:Configuration=$Env:CONFIGURATION /m /v:m
-- ps: msbuild src\examples\$Env:ex_solutionname /property:Configuration=$Env:CONFIGURATION /m /v:m
 
 after_build:
 - ps: utils/CREATE-ZIP.ps1 -b $Env:CONFIGURATION
@@ -90,7 +88,7 @@ test_script:
 
 artifacts:
 - path: 'src\x64\*.zip'
-  name: PMDK
+  name: VMEM
 
 - path: '*examples*.zip'
-  name: PMDK_examples
+  name: VMEM_examples

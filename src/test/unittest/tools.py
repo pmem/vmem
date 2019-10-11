@@ -39,13 +39,6 @@ import subprocess as sp
 
 import futils
 
-try:
-    import envconfig
-    envconfig = envconfig.config
-except ImportError:
-    # if file doesn't exist create dummy object
-    envconfig = {'GLOBAL_LIB_PATH': ''}
-
 PMEMDETECT_FALSE = 0
 PMEMDETECT_TRUE = 1
 PMEMDETECT_ERROR = 2
@@ -55,12 +48,10 @@ def pmemdetect(ctx, *args):
     env = os.environ.copy()
 
     if sys.platform == 'win32':
-        env['PATH'] = envconfig['GLOBAL_LIB_PATH'] + os.pathsep +\
-            ctx.build.libdir + os.pathsep +\
+        env['PATH'] = ctx.build.libdir + os.pathsep +\
             env.get('PATH', '')
     else:
-        env['LD_LIBRARY_PATH'] = envconfig['GLOBAL_LIB_PATH'] + os.pathsep +\
-            ctx.build.libdir + os.pathsep +\
+        env['LD_LIBRARY_PATH'] = ctx.build.libdir + os.pathsep +\
             env.get('LD_LIBRARY_PATH', '')
 
     exe = futils.get_test_tool_path(ctx, 'pmemdetect')

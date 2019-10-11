@@ -318,23 +318,6 @@ export pkgconfigdir := $(libdir)/pkgconfig
 export bindir := $(exec_prefix)/bin
 export bashcompdir := $(sysconfdir)/bash_completion.d
 
-LIBFABRIC_MIN_VERSION := 1.4.2
-
-# Keep in sync with requirements in src/test/unittest/unittest.sh and
-# utils/docker/images/install-libfabric.sh.
-ifeq ($(BUILD_RPMEM),)
-export BUILD_RPMEM := $(call check_package, libfabric --atleast-version=$(LIBFABRIC_MIN_VERSION))
-ifneq ($(BUILD_RPMEM),y)
-export BUILD_RPMEM_INFO := libfabric (version >= $(LIBFABRIC_MIN_VERSION)) is missing -- \
-see src/librpmem/README for details
-endif
-endif
-
-# unsafe shutdown count and badblock access without root (depends on kernel 4.20)
-NDCTL_MIN_VERSION_FIXED := 63
-
-NDCTL_MIN_VERSION := 60.1
-
 sparse-c = $(shell for c in *.c; do sparse -Wsparse-all -Wno-declaration-after-statement $(CFLAGS) $(INCS) $$c || true; done)
 
 ifeq ($(USE_LIBUNWIND),)
@@ -356,8 +339,6 @@ OS_LIBS=-L/usr/local/lib
 LIBDL=
 LIBUTIL=-lutil
 LIBUUID=-luuid
-LIBNDCTL=
-OS_DIMM=none
 
 else
 
@@ -367,44 +348,5 @@ OS_INCS=
 OS_LIBS=
 LIBDL=-ldl
 LIBUTIL=
-LIBUUID=
-
-NDCTL_ENABLE ?= y
-NDCTL_USE_V63_API ?= y
-
-# Detect libndctl if not disabled.
-ifeq ($(NDCTL_ENABLE),y)
-    ifeq ($(LIBNDCTL_LIBS),)
-        HAS_NDCTL :=  $(call check_package, libndctl --atleast-version $(NDCTL_MIN_VERSION_FIXED))
-        ifeq ($(HAS_NDCTL)$(NDCTL_USE_V63_API),yy)
-            OS_DIMM_CFLAG=-DNDCTL_GE_63
-        else
-            HAS_NDCTL :=  $(call check_package, libndctl --atleast-version $(NDCTL_MIN_VERSION))
-            ifeq ($(HAS_NDCTL),n)
-                $(error libndctl(version >= $(NDCTL_MIN_VERSION)) is missing -- see README)
-            endif
-            $(info WARNING: LIBNDCTL without permission fixes, some RAS features will be disabled)
-        endif
-        HAS_DAXCTL := $(call check_package, libdaxctl --atleast-version $(NDCTL_MIN_VERSION))
-        ifeq ($(HAS_DAXCTL),n)
-            $(error libdaxctl(version >= $(NDCTL_MIN_VERSION)) is missing -- see README)
-        endif
-        LIBNDCTL_PKG_CONFIG_DEPS := libndctl libdaxctl
-        LIBNDCTL_PKG_CONFIG_DEPS_VAR := ,libndctl,libdaxctl
-        LIBNDCTL_CFLAGS := $(shell $(PKG_CONFIG) --cflags $(LIBNDCTL_PKG_CONFIG_DEPS))
-        LIBNDCTL_LD_LIBRARY_PATHS := $(shell $(PKG_CONFIG) --variable=libdir $(LIBNDCTL_PKG_CONFIG_DEPS) | sed "s/ /:/")
-        LIBNDCTL_LIBS := $(shell $(PKG_CONFIG) --libs $(LIBNDCTL_PKG_CONFIG_DEPS))
-    endif
-    OS_DIMM := ndctl
-else
-    OS_DIMM := none
-endif
-export OS_DIMM
-export LIBNDCTL_PKG_CONFIG_DEPS
-export LIBNDCTL_PKG_CONFIG_DEPS_VAR
-export LIBNDCTL_CFLAGS
-export LIBNDCTL_LD_LIBRARY_PATHS
-export LIBNDCTL_LIBS
-export OS_DIMM_CFLAG
 
 endif

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright 2014-2018, Intel Corporation
+# Copyright 2014-2019, Intel Corporation
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -52,7 +52,7 @@ usage()
 	cat >&2 <<EOF
 Usage: $0 [ -h ] -t version-tag -s source-dir -w working-dir -o output-dir
 	[ -d distro ] [ -e build-experimental ] [ -c run-check ]
-	[ -r build-rpmem ] [ -n with-ndctl ] [ -f testconfig-file ]
+	[ -f testconfig-file ]
 
 -h			print this help message
 -t version-tag		source version tag
@@ -62,8 +62,6 @@ Usage: $0 [ -h ] -t version-tag -s source-dir -w working-dir -o output-dir
 -d distro		Linux distro name
 -e build-experimental	build experimental packages
 -c run-check		run package check
--r build-rpmem		build librpmem and rpmemd packages
--n with-ndctl		build with libndctl
 -f testconfig-file	custom testconfig.sh
 EOF
 	exit 1
@@ -90,14 +88,6 @@ do
 		;;
 	-f)
 		TEST_CONFIG_FILE="$2"
-		shift 2
-		;;
-	-r)
-		BUILD_RPMEM="$2"
-		shift 2
-		;;
-	-n)
-		NDCTL_ENABLE="$2"
 		shift 2
 		;;
 	-t)
@@ -154,9 +144,6 @@ if [ "$EXTRA_CFLAGS_RELEASE" = "" ]; then
 	export EXTRA_CFLAGS_RELEASE="-ggdb -fno-omit-frame-pointer"
 fi
 
-LIBFABRIC_MIN_VERSION=1.4.2
-NDCTL_MIN_VERSION=60.1
-
 RPMBUILD_OPTS=( )
 PACKAGE_VERSION=$(get_version $PACKAGE_VERSION_TAG)
 
@@ -171,8 +158,6 @@ PACKAGE_SOURCE=${PACKAGE_NAME}-${PACKAGE_VERSION}
 SOURCE=$PACKAGE_NAME
 PACKAGE_TARBALL=$PACKAGE_SOURCE.tar.gz
 RPM_SPEC_FILE=$PACKAGE_SOURCE/$PACKAGE_NAME.spec
-MAGIC_INSTALL=$PACKAGE_SOURCE/utils/magic-install.sh
-MAGIC_UNINSTALL=$PACKAGE_SOURCE/utils/magic-uninstall.sh
 OLDPWD=$PWD
 
 [ -d $WORKING_DIR ] || mkdir -v $WORKING_DIR
@@ -217,9 +202,7 @@ sed -e "s/__VERSION__/$PACKAGE_VERSION/g" \
 	-e "s/__PKG_NAME_SUFFIX__/$RPM_PKG_NAME_SUFFIX/g" \
 	-e "s/__MAKE_FLAGS__/$RPM_MAKE_FLAGS/g" \
 	-e "s/__MAKE_INSTALL_FDUPES__/$RPM_MAKE_INSTALL/g" \
-	-e "s/__LIBFABRIC_MIN_VER__/$LIBFABRIC_MIN_VERSION/g" \
-	-e "s/__NDCTL_MIN_VER__/$NDCTL_MIN_VERSION/g" \
-	$OLDPWD/$SCRIPT_DIR/pmdk.spec.in > $RPM_SPEC_FILE
+	$OLDPWD/$SCRIPT_DIR/vmem.spec.in > $RPM_SPEC_FILE
 
 if [ "$DISTRO" = "SLES_like" ]
 then
@@ -234,22 +217,6 @@ if [ "${EXPERIMENTAL}" = "y" ]
 then
 	# no experimental features for now
 	RPMBUILD_OPTS+=( )
-fi
-
-# librpmem & rpmemd
-if [ "${BUILD_RPMEM}" = "y" ]
-then
-	RPMBUILD_OPTS+=(--with fabric)
-else
-	RPMBUILD_OPTS+=(--without fabric)
-fi
-
-# daxio & RAS
-if [ "${NDCTL_ENABLE}" = "n" ]
-then
-	RPMBUILD_OPTS+=(--without ndctl)
-else
-	RPMBUILD_OPTS+=(--with ndctl)
 fi
 
 # use specified testconfig file or default

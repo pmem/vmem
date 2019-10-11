@@ -49,13 +49,6 @@ except ImportError:
     sys.exit('Please add valid testconfig.py file - see testconfig.py.example')
 config = testconfig.config
 
-try:
-    import envconfig
-    envconfig = envconfig.config
-except ImportError:
-    # if file doesn't exist create dummy object
-    envconfig = {'GLOBAL_LIB_PATH': ''}
-
 
 def expand(*classes):
     """Return flatten list of container classes with removed duplications"""
@@ -208,7 +201,6 @@ class Context(ContextBase):
 
         if sys.platform == 'win32':
             env['PATH'] = self.build.libdir + os.pathsep +\
-                envconfig['GLOBAL_LIB_PATH'] + os.pathsep +\
                 env.get('PATH', '')
             cmd = os.path.join(self.build.exedir, cmd) + '.exe'
 
@@ -218,7 +210,6 @@ class Context(ContextBase):
                     self.test.ld_preload
                 self.valgrind.handle_ld_preload(self.test.ld_preload)
             env['LD_LIBRARY_PATH'] = self.build.libdir + os.pathsep +\
-                envconfig['GLOBAL_LIB_PATH'] + os.pathsep +\
                 env.get('LD_LIBRARY_PATH', '')
             cmd = os.path.join(self.test.cwd, cmd) + self.build.exesuffix
             cmd = '{} {}'.format(self.valgrind.cmd, cmd)

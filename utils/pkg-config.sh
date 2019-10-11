@@ -30,7 +30,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Name of package
-PACKAGE_NAME="pmdk"
+PACKAGE_NAME="vmem"
 
 # Name and email of package maintainer
 PACKAGE_MAINTAINER="Marcin Slusarz <marcin.slusarz@intel.com>"

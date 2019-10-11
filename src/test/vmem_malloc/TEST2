@@ -39,7 +39,8 @@
 
 require_test_type medium
 require_fs_type any
-require_dax_devices 1
+require_command daxio
+require_dax_device
 
 setup
 

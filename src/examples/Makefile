@@ -36,7 +36,7 @@
 
 include ../common.inc
 
-DIRS = libpmem libpmemblk libpmemlog libpmemobj libvmem librpmem libpmempool pmreorder
+DIRS = libvmem
 
 include Makefile.inc
 

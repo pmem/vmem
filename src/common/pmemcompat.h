@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019, Intel Corporation
+ * Copyright 2016-2018, Intel Corporation
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,53 +31,54 @@
  */
 
 /*
- * uuid.h -- internal definitions for uuid module
+ * pmemcompat.h -- compatibility layer for libpmem* libraries
  */
 
-#ifndef PMDK_UUID_H
-#define PMDK_UUID_H 1
+#ifndef PMEMCOMPAT_H
+#define PMEMCOMPAT_H
+#include <windows.h>
 
-#include <stdint.h>
-#include <string.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*
- * Structure for binary version of uuid. From RFC4122,
- * https://tools.ietf.org/html/rfc4122
- */
-struct uuid {
-	uint32_t time_low;
-	uint16_t time_mid;
-	uint16_t time_hi_and_ver;
-	uint8_t clock_seq_hi;
-	uint8_t	clock_seq_low;
-	uint8_t node[6];
+struct iovec {
+	void  *iov_base;
+	size_t iov_len;
 };
 
-#define POOL_HDR_UUID_LEN	16 /* uuid byte length */
-#define POOL_HDR_UUID_STR_LEN	37 /* uuid string length */
-#define POOL_HDR_UUID_GEN_FILE	"/proc/sys/kernel/random/uuid"
-
-typedef unsigned char uuid_t[POOL_HDR_UUID_LEN]; /* 16 byte binary uuid value */
-
-int util_uuid_to_string(const uuid_t u, char *buf);
-int util_uuid_from_string(const char uuid[POOL_HDR_UUID_STR_LEN],
-	struct uuid *ud);
-
+typedef int mode_t;
 /*
- * uuidcmp -- compare two uuids
+ * XXX: this code will not work on windows if our library is included in
+ * an extern block.
  */
-static inline int
-uuidcmp(const uuid_t uuid1, const uuid_t uuid2)
-{
-	return memcmp(uuid1, uuid2, POOL_HDR_UUID_LEN);
-}
+#if defined(__cplusplus) && defined(_MSC_VER) && !defined(__typeof__)
+#include <type_traits>
+/*
+ * These templates are used to remove a type reference(T&) which, in some
+ * cases, is returned by decltype
+ */
+namespace pmem {
 
-#ifdef __cplusplus
-}
+namespace detail {
+
+template<typename T>
+struct get_type {
+	using type = T;
+};
+
+template<typename T>
+struct get_type<T*> {
+	using type = T*;
+};
+
+template<typename T>
+struct get_type<T&> {
+	using type = T;
+};
+
+} /* namespace detail */
+
+} /* namespace pmem */
+
+#define __typeof__(p) pmem::detail::get_type<decltype(p)>::type
+
 #endif
 
 #endif

@@ -58,22 +58,22 @@ if [[ $subject =~ ^Revert.* ]]; then
 fi
 
 # valid area names
-AREAS="pmem\|rpmem\|log\|blk\|obj\|pool\|test\|benchmark\|examples\|vmem\|vmmalloc\|jemalloc\|doc\|common\|daxio\|pmreorder"
+AREAS="test\|benchmark\|examples\|vmem\|vmmalloc\|jemalloc\|doc\|common"
 
-prefix=$(echo $subject | sed -n "s/^\($AREAS\)\:.*/\1/p")
+# Check commit message
+for commit in $commits; do
+	subject=$(git log --format="%s" -n 1 $commit)
+	commit_len=$(git log --format="%s%n%b" -n 1 $commit | wc -L)
 
-if [ "$prefix" = "" ]; then
-	echo "FAIL: subject line in commit message does not contain valid area name"
-	echo
-	`dirname $0`/check-area.sh $1
-	exit 1
-fi
+	if [[ $subject =~ ^Merge.* ]]; then
+		# skip
+		continue
+	fi
 
-commit_len=$(git log --format="%s%n%b" -n 1 $1 | wc -L)
-
-if [ $commit_len -gt 73 ]; then
-	echo "FAIL: commit message exceeds 72 chars per line (commit_len)"
-	echo
-	git log -n 1 $1 | cat
-	exit 1
-fi
+	if [ $commit_len -gt 73 ]; then
+		echo "FAIL: commit message exceeds 72 chars per line (commit_len)"
+		echo
+		git log -n 1 $1 | cat
+		exit 1
+	fi
+done

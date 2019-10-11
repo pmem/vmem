@@ -38,45 +38,18 @@ TOP = ../../..
 
 TESTCONFIG=$(TOP)/src/test/testconfig.sh
 
-DIRS = \
-       pmemspoil\
-       pmemwrite\
-       pmemalloc\
-       pmemobjcli\
-       pmemdetect\
-       ctrld\
-       bttcreate\
-       fip\
-       ddmap\
-       cmpmap\
-       extents\
-       fallocate_detect\
-       obj_verify\
-       usc_permission_check\
-       anonymous_mmap
-
-REMOTE_TOOLS = \
-	ctrld\
-	extents\
-	fip\
-	obj_verify\
-	pmemobjcli\
-	pmemspoil\
-	pmemdetect
+DIRS = fallocate_detect
 
 all     : TARGET = all
 clean   : TARGET = clean
 clobber : TARGET = clobber
 cstyle  : TARGET = cstyle
 format  : TARGET = format
-sync-remotes : TARGET = sync-remotes
 sparse  : TARGET = sparse
 
 all test cstyle clean clobber format sparse: $(DIRS)
 
 $(TESTCONFIG):
-
-sync-remotes: $(REMOTE_TOOLS) $(TESTCONFIG)
 
 $(DIRS):
 	$(MAKE) -C $@ $(TARGET)

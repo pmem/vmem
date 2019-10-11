@@ -737,7 +737,6 @@ static void
 ut_start_common(const char *file, int line, const char *func,
     const char *fmt, va_list ap)
 {
-
 	int saveerrno = errno;
 	char logname[MAXLOGFILENAME];
 	char *logsuffix;
@@ -748,6 +747,8 @@ ut_start_common(const char *file, int line, const char *func,
 	Ut_pagesize = (unsigned long)sc;
 
 #ifdef _WIN32
+	util_init();
+
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
 	Ut_mmap_align = si.dwAllocationGranularity;

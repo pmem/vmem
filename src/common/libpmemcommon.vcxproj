@@ -12,31 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="alloc.c" />
-    <ClCompile Include="badblock_none.c" />
-    <ClCompile Include="badblock.c" />
-    <ClCompile Include="ctl.c" />
-    <ClCompile Include="ctl_cow.c" />
-    <ClCompile Include="ctl_prefault.c" />
-    <ClCompile Include="ctl_sds.c" />
-    <ClCompile Include="ctl_fallocate.c" />
     <ClCompile Include="file.c" />
     <ClCompile Include="file_windows.c" />
     <ClCompile Include="mmap.c" />
     <ClCompile Include="mmap_windows.c" />
-    <ClCompile Include="fs_windows.c" />
-    <ClCompile Include="os_auto_flush_windows.c" />
-    <ClCompile Include="os_deep_windows.c" />
-    <ClCompile Include="os_dimm_windows.c" />
     <ClCompile Include="os_thread_windows.c" />
-    <ClCompile Include="os_windows.c" />
     <ClCompile Include="out.c" />
     <ClCompile Include="pool_hdr.c" />
-    <ClCompile Include="set.c" />
-    <ClCompile Include="shutdown_state.c" />
     <ClCompile Include="util.c" />
     <ClCompile Include="util_windows.c" />
-    <ClCompile Include="uuid.c" />
-    <ClCompile Include="uuid_windows.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="alloc.h" />
@@ -62,6 +46,11 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="uuid.h" />
     <ClInclude Include="valgrind_internal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\windows\srcversion\srcversion.vcxproj">
+      <Project>{901f04db-e1a5-4a41-8b81-9d31c19acd59}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{492BAA3D-0D5D-478E-9765-500463AE69AA}</ProjectGuid>

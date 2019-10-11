@@ -37,9 +37,6 @@ include $(TOP)/src/common.inc
 
 INCLUDE = $(TOP)/src/include
 
-RPMEM_COMMON = $(TOP)/src/rpmem_common
-vpath %.c $(RPMEM_COMMON)
-
 COMMON = $(TOP)/src/common
 vpath %.c $(COMMON)
 
@@ -92,7 +89,7 @@ ifeq ($(DEBUG),1)
 # user-defined CFLAGS as it conflicts with -O0.
 DEBUG_CFLAGS += -Wp,-U_FORTIFY_SOURCE
 DEBUG_CFLAGS += -O0 -ggdb -DDEBUG
-LIB_SUBDIR = /pmdk_debug
+LIB_SUBDIR = /vmem_debug
 OBJDIR = debug
 else
 DEFAULT_CFLAGS += -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
@@ -107,11 +104,6 @@ CFLAGS += -std=gnu99
 CFLAGS += -fno-common
 CFLAGS += -pthread
 CFLAGS += -DSRCVERSION=\"$(SRCVERSION)\"
-
-ifeq ($(OS_DIMM),ndctl)
-CFLAGS += -DSDS_ENABLED
-CFLAGS += $(OS_DIMM_CFLAG)
-endif
 
 ifeq ($(COVERAGE),1)
 CFLAGS += $(GCOV_CFLAGS)
@@ -156,7 +148,7 @@ endif
 LDFLAGS += -Wl,-z,relro -Wl,--fatal-warnings -Wl,--warn-common $(EXTRA_LDFLAGS)
 
 ifneq ($(NORPATH),1)
-LDFLAGS += -Wl,-rpath=$(libdir)$(LIB_SUBDIR):$(LIBNDCTL_LD_LIBRARY_PATHS)
+LDFLAGS += -Wl,-rpath=$(libdir)$(LIB_SUBDIR)
 endif
 
 ifeq ($(LIBRT_NEEDED), y)
@@ -176,12 +168,6 @@ TESTCMD := $(CC) $(CFLAGS) -dM -E -x c /dev/null -o /dev/null
 TESTBUILD := $(shell $(TESTCMD) && echo 1 || echo 0)
 ifneq ($(TESTBUILD), 1)
 $(error "$(TESTCMD)" failed)
-endif
-
-ifneq ($(ARCH), x86_64)
-ifneq ($(ARCH), aarch64)
-$(error unsupported architecture: $(ARCH))
-endif
 endif
 
 LP64 := $(shell $(CC) $(CFLAGS) -dM -E -x c /dev/null | grep -Ec "__SIZEOF_LONG__.+8|__SIZEOF_POINTER__.+8" )

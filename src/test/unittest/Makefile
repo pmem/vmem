@@ -42,7 +42,7 @@ vpath %.h $(TOP)/src/common
 
 TARGET = libut.a
 OBJS = ut.o ut_alloc.o ut_file.o ut_pthread.o ut_signal.o ut_backtrace.o\
-	os_posix.o os_thread_posix.o rand.o
+	os_posix.o os_thread_posix.o rand.o alloc.o
 CFLAGS = -I$(TOP)/src/include
 CFLAGS += -I$(TOP)/src/common
 CFLAGS += $(OS_INCS)
@@ -93,6 +93,11 @@ ifeq ($(COVERAGE),1)
 CFLAGS += $(GCOV_CFLAGS)
 LDFLAGS += $(GCOV_LDFLAGS)
 LIBS += $(GCOV_LIBS)
+endif
+
+ifeq ($(FAULT_INJECTION),1)
+CFLAGS += -DFAULT_INJECTION=1
+CXXFLAGS += -DFAULT_INJECTION=1
 endif
 
 CFLAGS += $(EXTRA_CFLAGS)

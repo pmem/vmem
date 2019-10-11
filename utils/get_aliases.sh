@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright 2017-2018, Intel Corporation
+# Copyright 2017-2019, Intel Corporation
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -34,7 +34,7 @@
 #
 # get_aliases.sh -- generate map of manuals functions and libraries
 #
-# usage: run from /pmdk/doc/generated location without parameters:
+# usage: run from /vmem/doc/generated location without parameters:
 # ./../../utils/get_aliases.sh
 #
 # This script searches manpages from section 7 then
@@ -76,36 +76,6 @@ function list_pages {
 	list=("$@")
 	man_child=("$@")
 
-	if [ "$parent" == "libpmem" ]; then
-		man_child=($(ls pmem_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
-	if [ "$parent" == "libpmemblk" ]; then
-		man_child=($(ls pmemblk_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
-	if [ "$parent" == "libpmemlog" ]; then
-		man_child=($(ls pmemlog_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
-	if [ "$parent" == "libpmemobj" ]; then
-		man_child=($(ls pmemobj_*.3))
-		man_child+=($(ls pobj_*.3))
-		man_child+=($(ls oid_*.3))
-		man_child+=($(ls toid_*.3))
-		man_child+=($(ls direct_*.3))
-		man_child+=($(ls d_r*.3))
-		man_child+=($(ls tx_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
 	if [ "$parent" == "libvmmalloc" ]; then
 		man_child=($(ls vmmalloc_*.3 2>/dev/null))
 		echo -n "- $parent: " >> $map_file
@@ -113,18 +83,6 @@ function list_pages {
 
 	if [ "$parent" == "libvmem" ]; then
 		man_child=($(ls vmem_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
-	if [ "$parent" == "libpmempool" ]; then
-		man_child=($(ls pmempool_*.3))
-		echo -n "- $parent: " >> $map_file
-		echo "${man_child[@]}" >> $map_file
-	fi
-
-	if [ "$parent" == "librpmem" ]; then
-		man_child=($(ls rpmem_*.3))
 		echo -n "- $parent: " >> $map_file
 		echo "${man_child[@]}" >> $map_file
 	fi
