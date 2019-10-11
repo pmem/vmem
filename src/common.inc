@@ -316,7 +316,6 @@ export libdir := $(exec_prefix)/$(LIB_PREFIX)
 export includedir := $(prefix)/$(INC_PREFIX)
 export pkgconfigdir := $(libdir)/pkgconfig
 export bindir := $(exec_prefix)/bin
-export bashcompdir := $(sysconfdir)/bash_completion.d
 
 sparse-c = $(shell for c in *.c; do sparse -Wsparse-all -Wno-declaration-after-statement $(CFLAGS) $(INCS) $$c || true; done)
 

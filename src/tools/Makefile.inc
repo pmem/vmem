@@ -112,8 +112,6 @@ else
 LDFLAGS += -L$(TOP)/src/nondebug
 endif
 TARGET_DIR=$(DESTDIR)$(bindir)
-BASH_COMP_FILES ?=
-BASH_COMP_DESTDIR = $(DESTDIR)$(bashcompdir)
 
 ifneq ($(DEBUG),1)
 TARGET_STATIC_NONDEBUG=$(TARGET).static-nondebug
@@ -212,19 +210,12 @@ ifneq ($(TARGET),)
 	install -d $(TARGET_DIR)
 	install -p -m 0755 $(TARGET) $(TARGET_DIR)
 endif
-ifneq ($(BASH_COMP_FILES),)
-	install -d $(BASH_COMP_DESTDIR)
-	install -p -m 0644 $(BASH_COMP_FILES) $(BASH_COMP_DESTDIR)
-endif
 endif
 
 uninstall:
 ifeq ($(INSTALL_TARGET),y)
 ifneq ($(TARGET),)
 	$(RM) $(TARGET_DIR)/$(TARGET)
-endif
-ifneq ($(BASH_COMP_FILES),)
-	$(RM) $(BASH_COMP_DESTDIR)/$(BASH_COMP_FILES)
 endif
 endif
 
