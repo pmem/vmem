@@ -38,7 +38,6 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
 # there's no point in testing statically linked builds
 require_build_type nondebug
 require_no_asan

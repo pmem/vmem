@@ -159,12 +159,6 @@ Tests can require a specific build types:
 
 Most tests are short "make check" tests, designed to run quickly when
 smoke-checking a build.
-Three test types are available: short, medium and long.
-Each test script must use require_test_type to indicate to which group
-of tests it belongs to.  For example, if it should only run during a long
-test run, it can use this line:
-
-	require_test_type long
 
 Using the unittest library, the C programs run during unit testing get their
 output and tracing information logged to various files.  These are named with

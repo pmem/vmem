@@ -37,7 +37,6 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
 require_procfs
 configure_valgrind memcheck force-disable
 
