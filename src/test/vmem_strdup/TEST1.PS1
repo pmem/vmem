@@ -35,7 +35,6 @@
 
 . ..\unittest\unittest.ps1
 
-require_test_type medium
 
 setup
 

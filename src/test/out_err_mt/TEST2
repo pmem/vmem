@@ -37,7 +37,6 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
 require_valgrind 3.7
 configure_valgrind helgrind force-enable
 

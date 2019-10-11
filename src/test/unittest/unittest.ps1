@@ -536,37 +536,6 @@ function require_no_superuser {
 }
 
 #
-# require_test_type -- only allow script to continue for a certain test type
-#
-function require_test_type() {
-    sv -Name req_test_type 1 -Scope Global
-
-    if ($Env:TYPE -eq 'all') {
-        return
-    }
-
-    for ($i=0;$i -lt $args.count;$i++) {
-        if ($args[$i] -eq $Env:TYPE) {
-            return
-        }
-        switch ($Env:TYPE) {
-            'check' { # "check" is a synonym of "short + medium"
-                if ($args[$i] -eq 'short' -Or $args[$i] -eq 'medium') {
-                    return
-                }
-            }
-            default {
-                if ($args[$i] -eq $Env:TYPE) {
-                    return
-                }
-            }
-        }
-        verbose_msg "${Env:UNITTEST_NAME}: SKIP test-type $Env:TYPE ($* required)"
-        exit 0
-    }
-}
-
-#
 # require_build_type -- only allow script to continue for a certain build type
 #
 function require_build_type {
@@ -1008,11 +977,6 @@ function setup {
 
     $Script:DIR = $DIR + "\" + $Env:DIRSUFFIX + "\" + $curtestdir + $Env:UNITTEST_NUM + $Env:SUFFIX
 
-
-    # test type must be explicitly specified
-    if ($req_test_type -ne "1") {
-        fatal "error: required test type is not specified"
-    }
 
     # fs type "none" must be explicitly enabled
     if ($Env:FS -eq "none" -and $Global:req_fs_type -ne "1") {

@@ -1013,32 +1013,6 @@ function require_x86_64() {
 }
 
 #
-# require_test_type -- only allow script to continue for a certain test type
-#
-function require_test_type() {
-	req_test_type=1
-	for type in $*
-	do
-		case "$TEST"
-		in
-		all)
-			# "all" is a synonym of "short + medium + long"
-			return
-			;;
-		check)
-			# "check" is a synonym of "short + medium"
-			[ "$type" = "short" -o "$type" = "medium" ] && return
-			;;
-		*)
-			[ "$type" = "$TEST" ] && return
-			;;
-		esac
-	done
-	verbose_msg "$UNITTEST_NAME: SKIP test-type $TEST ($* required)"
-	exit 0
-}
-
-#
 # dax_device_zero -- zero all local dax devices
 #
 dax_device_zero() {
@@ -1567,11 +1541,6 @@ function setup() {
 	# that allows read location of data after test failure
 	if [ -f "$TEMP_LOC" ]; then
 		echo "$DIR" > $TEMP_LOC
-	fi
-
-	# test type must be explicitly specified
-	if [ "$req_test_type" != "1" ]; then
-		fatal "error: required test type is not specified"
 	fi
 
 	# fs type "none" must be explicitly enabled

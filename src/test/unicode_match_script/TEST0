@@ -37,7 +37,6 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
 # there's no point in testing different builds
 require_build_type debug
 
