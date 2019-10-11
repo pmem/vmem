@@ -71,7 +71,6 @@ RPM_BUILDDIR=rpmbuild
 DPKG_BUILDDIR=dpkgbuild
 EXPERIMENTAL ?= n
 BUILD_PACKAGE_CHECK ?= y
-BUILD_RPMEM ?= y
 TEST_CONFIG_FILE ?= "$(CURDIR)"/src/test/testconfig.sh
 
 rpm : override DESTDIR="$(CURDIR)/$(RPM_BUILDDIR)"
@@ -97,14 +96,6 @@ clobber:
 	$(MAKE) -C utils $@
 	$(RM) -r $(RPM_BUILDDIR) $(DPKG_BUILDDIR) rpm dpkg
 	$(RM) -f $(GIT_VERSION)
-
-require-rpmem:
-ifneq ($(BUILD_RPMEM),y)
-	$(error ERROR: cannot run remote tests because $(BUILD_RPMEM_INFO))
-endif
-
-check-remote: require-rpmem all
-	$(MAKE) -C src $@
 
 test check pcheck: all
 	$(MAKE) -C src $@
