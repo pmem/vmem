@@ -14,7 +14,7 @@
 # characters.  Due to limitation of powershell you have to use UNC prefix
 # (i.e.  \\?\c:\tmp) in PMEM_FS_DIR and NON_PMEM_FS_DIR variables.
 #
-# $Local:LONGDIR = "LoremipsumdolorsitametconsecteturadipiscingelitVivamuslacinianibhattortordictumsollicitudinNullamvariusvestibulumligulaetegestaselitsemperidMaurisultriciesligulaeuipsumtinciduntluctusMorbimaximusvariusdolorid"
+# $Local:LONGDIR = "PhngluimglwnafhCthulhuRlyehwgahnaglfhtagnHaizhronaDagonhaiepngmnahnhriikadishtugnaiihcuhesyhahfgnaiihsgnwahlnogsgnwahlnghahaiChaugnarFaugnhlirghHshtungglingnogRlyehnghaogShub-NiggurathothhgofnnlloigshuggsllhannnCthulhuahnyth"
 #$Env:DIRSUFFIX = "$LONGDIR\$LONGDIR\$LONGDIR\$LONGDIR\$LONGDIR"
 
 #
