@@ -1039,16 +1039,25 @@ function require_test_type() {
 }
 
 #
-# require_dev_dax_region -- check if region id file exist for dev dax
+# dax_device_zero -- zero all local dax devices
 #
-function require_dev_dax_region() {
+dax_device_zero() {
+	for path in ${DEVICE_DAX_PATH[@]}
+	do
+		daxio -z -b no -o "$path"
+	done
+}
+
+#
+# require_dev_dax -- check if given dev dax is indeed that (has valid size)
+#
+function require_dev_dax() {
 	local prefix="$UNITTEST_NAME: SKIP"
-	local cmd="$PMEMDETECT -r"
 
 	for path in ${DEVICE_DAX_PATH[@]}
 	do
 		disable_exit_on_error
-		out=$($cmd $path 2>&1)
+		out=$(get_devdax_size $path)
 		ret=$?
 		restore_exit_on_error
 
@@ -1058,7 +1067,7 @@ function require_dev_dax_region() {
 			msg "$prefix $out"
 			exit 0
 		else
-			fatal "$UNITTEST_NAME: pmemdetect: $out"
+			fatal "$UNITTEST_NAME: get_devdax_size: $out"
 		fi
 	done
 	DEVDAX_TO_LOCK=1
@@ -1081,13 +1090,11 @@ unlock_devdax() {
 }
 
 #
-# require_dax_devices -- only allow script to continue if there is a required
-# number of Device DAX devices
+# require_dax_device -- only allow script to continue if there is at least
+# one Device DAX devices
 #
-function require_dax_devices() {
-	verbose_msg "$UNITTEST_NAME: SKIP dax $TEST"
-	exit 0
-	#require_dev_dax_node $1
+function require_dax_device() {
+	require_dev_dax ${DEVICE_DAX_PATH[0]}
 }
 
 #
@@ -1098,21 +1105,10 @@ function require_no_unicode() {
 }
 
 #
-# dax_device_zero -- zero all local dax devices
-#
-dax_device_zero() {
-	for path in ${DEVICE_DAX_PATH[@]}
-	do
-		pmempool rm -f $path
-	done
-}
-
-#
 # get_devdax_size -- get the size of a device dax
 #
 function get_devdax_size() {
-	local device=$1
-	local path=${DEVICE_DAX_PATH[$device]}
+	local path=$1
 	local major_hex=$(stat -c "%t" $path)
 	local minor_hex=$(stat -c "%T" $path)
 	local major_dec=$((16#$major_hex))
