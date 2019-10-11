@@ -942,24 +942,6 @@ function compare_replicas {
 }
 
 #
-# require_fs_type -- only allow script to continue for a certain fs type
-#
-function require_fs_type {
-    $Global:req_fs_type = 1
-
-    for ($i = 0; $i -lt $args.count; $i++) {
-        $type = $args[$i]
-
-        # treat 'any' as either 'pmem' or 'non-pmem'
-        if (($type -eq $Env:FS) -or (($type -eq "any") -and ($Env:FS -ne "none") -and $Env:FORCE_FS -eq 1)) {
-		return;
-        }
-    }
-    verbose_msg "${Env:UNITTEST_NAME}: SKIP fs-type $Env:FS (not configured)"
-    exit 0
-}
-
-#
 # require_dax_devices -- only allow script to continue for a dax device
 #
 function require_dax_devices() {

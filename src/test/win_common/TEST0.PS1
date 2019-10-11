@@ -36,7 +36,6 @@ $DIR = ""
 
 . ..\unittest\unittest.ps1
 
-require_fs_type none
 require_test_type medium
 
 setup

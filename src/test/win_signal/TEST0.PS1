@@ -38,8 +38,6 @@
 
 require_test_type medium
 
-require_fs_type none
-
 setup
 
 expect_normal_exit $Env:EXE_DIR\win_signal$Env:EXESUFFIX

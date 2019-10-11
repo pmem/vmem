@@ -38,8 +38,6 @@
 . ../unittest/unittest.sh
 
 require_test_type medium
-
-require_fs_type any
 require_build_type debug nondebug
 
 # TEST2/TEST3 are specifically for helgrind/drd tests

@@ -39,8 +39,6 @@
 
 require_test_type medium
 
-require_fs_type none
-
 setup
 
 expect_normal_exit ./vmem_realloc$EXESUFFIX

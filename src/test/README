@@ -153,28 +153,7 @@ There are two ways of setting test requirements:
 	method. It can be used simultaneously with config.sh. Available require_*
 	utility functions are described below.
 
-If a test does not need any storage, the script uses this line:
-
-	require_fs_type none
-
-Similarly, if the test only makes sense for pmem or non-pmem:
-
-	require_fs_type pmem
-		or
-	require_fs_type non-pmem
-
-The above two are often combined to indicate the test should run once for pmem
-and once for non-pmem:
-
-	require_fs_type pmem non-pmem
-
-If the test requires some storage, but does not care whether it's pmem or not:
-
-	require_fs_type any
-
-If both pmem and non-pmem are available, "any" means "pmem".
-
-Similar to the above, tests can require a specific build types:
+Tests can require a specific build types:
 
 	require_build_type debug
 
@@ -195,7 +174,6 @@ produce:
 	err0.log	log of stderr
 	out0.log	log of stdout
 	trace0.log	trace points from unittest library
-	pmem0.log	trace from libpmem (PMEM_LOG_FILE points here)
 	vmem0.log	trace from libvmem (VMEM_LOG_FILE points here)
 
 Although the above log files are the common case, the TEST* scripts are free to

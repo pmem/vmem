@@ -39,8 +39,6 @@
 
 require_test_type medium
 
-require_fs_type any
-
 # this test generates sigsegvs on purpose
 configure_valgrind memcheck force-disable
 

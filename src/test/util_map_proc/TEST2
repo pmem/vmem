@@ -39,8 +39,6 @@
 
 require_test_type medium
 
-require_fs_type none
-
 setup
 
 # due to alignment requirements there should be no hint address for

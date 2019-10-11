@@ -38,8 +38,6 @@
 
 require_test_type medium
 
-require_fs_type any
-
 setup
 
 create_holey_file 1K $DIR\testfile1
