@@ -294,8 +294,6 @@ endif
 INC_PREFIX ?= include
 
 test_build=$(addprefix "-b ", $(TEST_BUILD))
-test_type=$(addprefix " -t ", $(TEST_TYPE))
-test_fs=$(addprefix " -f ", $(TEST_FS))
 test_time=$(addprefix " -o ", $(TEST_TIME))
 test_memcheck=$(addprefix " -m ", $(MEMCHECK))
 test_pmemcheck=$(addprefix " -p ", $(PMEMCHECK))
