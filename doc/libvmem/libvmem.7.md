@@ -3,7 +3,7 @@ layout: manual
 Content-Style: 'text/css'
 title: _MP(LIBVMEM, 7)
 collection: libvmem
-header: PMDK
+header: VMEM
 date: vmem API version 1.1
 ...
 
@@ -281,7 +281,7 @@ main(int argc, char *argv[])
 }
 ```
 
-See <http://pmem.io/pmdk/libvmem> for more examples using the **libvmem** API.
+See <http://pmem.io/vmem/libvmem> for more examples using the **libvmem** API.
 
 
 # BUGS #

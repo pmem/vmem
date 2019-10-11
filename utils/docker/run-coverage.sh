@@ -37,7 +37,7 @@
 
 set -e
 
-# Get and prepare PMDK source
+# Get and prepare VMEM source
 ./prepare-for-build.sh
 
 # Hush error messages, mainly from Valgrind

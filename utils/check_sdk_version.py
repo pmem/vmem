@@ -42,7 +42,7 @@ VALID_SDK_VERSION = '10.0.16299.0'
 
 
 def get_vcxproj_files(root_dir, ignored):
-    """Get a list ".vcxproj" files under PMDK directory."""
+    """Get a list ".vcxproj" files under VMEM directory."""
     to_format = []
     command = 'git ls-files *.vcxproj'
     try:
@@ -84,7 +84,7 @@ def main():
     parser = argparse.ArgumentParser(prog='check_sdk_version.py',
         description='The script checks Windows SDK version in .vcxproj files.')
     parser.add_argument('-d', '--directory',
-                        help='Directory of PMDK tree.', required=True)
+                        help='Directory of VMEM tree.', required=True)
     args = parser.parse_args()
     current_directory = args.directory
     if not os.path.isdir(current_directory):

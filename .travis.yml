@@ -15,27 +15,27 @@ env:
     - OS=ubuntu
     - OS_VER=18.04
     - MAKE_PKG=0
-    - PMDK_CC=gcc
-    - PMDK_CXX=g++
+    - VMEM_CC=gcc
+    - VMEM_CXX=g++
     - VALGRIND=1
   matrix:
     - COVERAGE=1 FAULT_INJECTION=1 TEST_BUILD=debug
     - FAULT_INJECTION=1 TEST_BUILD=debug
     - FAULT_INJECTION=1 TEST_BUILD=nondebug
-    - PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
-    - PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug
-    - OS=fedora OS_VER=28 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
-    - OS=fedora OS_VER=28 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug AUTO_DOC_UPDATE=1
+    - VMEM_CC=clang VMEM_CXX=clang++ TEST_BUILD=debug
+    - VMEM_CC=clang VMEM_CXX=clang++ TEST_BUILD=nondebug
+    - OS=fedora OS_VER=28 VMEM_CC=clang VMEM_CXX=clang++ TEST_BUILD=debug
+    - OS=fedora OS_VER=28 VMEM_CC=clang VMEM_CXX=clang++ TEST_BUILD=nondebug AUTO_DOC_UPDATE=1
     - MAKE_PKG=1 EXPERIMENTAL=y VALGRIND=0 PUSH_IMAGE=1
     - MAKE_PKG=1 EXPERIMENTAL=y VALGRIND=0 PUSH_IMAGE=1 OS=fedora OS_VER=28
-    - MAKE_PKG=1 EXPERIMENTAL=y VALGRIND=0 PMDK_CC=clang PMDK_CXX=clang++
+    - MAKE_PKG=1 EXPERIMENTAL=y VALGRIND=0 VMEM_CC=clang VMEM_CXX=clang++
     - COVERITY=1
 
 before_install:
   - echo $TRAVIS_COMMIT_RANGE
   - export HOST_WORKDIR=`pwd`
-  - export GITHUB_REPO=pmem/pmdk
-  - export DOCKERHUB_REPO=pmem/pmdk
+  - export GITHUB_REPO=pmem/vmem
+  - export DOCKERHUB_REPO=pmem/vmem
   - cd utils/docker
   - ./pull-or-rebuild-image.sh
   - if [[ -f push_image_to_repo_flag ]]; then PUSH_THE_IMAGE=1; fi

@@ -31,7 +31,7 @@
 #
 
 #
-# doc/Makefile -- Makefile for PMDK man pages
+# doc/Makefile -- Makefile for VMEM man pages
 #
 
 include ../src/common.inc

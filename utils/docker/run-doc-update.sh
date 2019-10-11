@@ -36,7 +36,7 @@ source `dirname $0`/valid-branches.sh
 
 BOT_NAME="pmem-bot"
 USER_NAME="pmem"
-REPO_NAME="pmdk"
+REPO_NAME="vmem"
 
 ORIGIN="https://${GITHUB_TOKEN}@github.com/${BOT_NAME}/${REPO_NAME}"
 UPSTREAM="https://github.com/${USER_NAME}/${REPO_NAME}"

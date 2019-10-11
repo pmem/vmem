@@ -32,7 +32,7 @@
 
 #
 # build-image.sh <OS-VER> - prepares a Docker image with <OS>-based
-#                           environment for building PMDK project, according
+#                           environment for building VMEM project, according
 #                           to the Dockerfile.<OS-VER> file located
 #                           in the same directory.
 #

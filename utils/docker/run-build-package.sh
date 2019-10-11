@@ -32,7 +32,7 @@
 
 #
 # run-build-package.sh - is called inside a Docker container; prepares
-#                        the environment and starts a build of PMDK project.
+#                        the environment and starts a build of VMEM project.
 #
 
 set -e

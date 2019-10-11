@@ -31,7 +31,7 @@
 
 #
 # Dockerfile - a 'recipe' for Docker to build an image of ubuntu-based
-#              environment for building the PMDK project.
+#              environment for building the VMEM project.
 #
 
 # Pull base image
@@ -48,21 +48,13 @@ ENV VALGRIND_DEPS "autoconf \
 	build-essential \
 	git"
 
-# pmdk base
+# vmem base
 ENV BASE_DEPS "build-essential \
 	git \
 	pkg-config"
 
 # jemalloc
 ENV JEMALLOC_DEPS autoconf
-
-# benchmarks (optional)
-ENV BENCH_DEPS libglib2.0-dev
-
-# examples (optional)
-ENV EXAMPLES_DEPS "libfuse-dev \
-	libncurses5-dev \
-	libuv1-dev"
 
 # documentation (optional)
 ENV DOC_DEPS pandoc
@@ -71,9 +63,7 @@ ENV DOC_DEPS pandoc
 ENV TESTS_DEPS "bc \
 	libc6-dbg \
 	libunwind-dev \
-	python3 \
-	ssh \
-	strace"
+	python3"
 
 # packaging
 ENV PACKAGING_DEPS "debhelper \
@@ -97,8 +87,6 @@ RUN apt-get install -y --no-install-recommends \
 	$VALGRIND_DEPS \
 	$BASE_DEPS \
 	$JEMALLOC_DEPS \
-	$BENCH_DEPS \
-	$EXAMPLES_DEPS \
 	$DOC_DEPS \
 	$TESTS_DEPS \
 	$PACKAGING_DEPS \
@@ -111,17 +99,12 @@ COPY install-valgrind.sh install-valgrind.sh
 RUN ./install-valgrind.sh
 
 # Add user
-ENV USER pmdkuser
-ENV USERPASS pmdkpass
+ENV USER vmemuser
+ENV USERPASS vmempass
 RUN useradd -m $USER -g sudo -p `mkpasswd $USERPASS`
 
 # remove stuff no longer needed
 RUN apt remove -y \
-	libjson-c-dev \
-	libkeyutils-dev \
-	libkmod-dev \
-	libudev-dev \
-	uuid-dev \
 	unzip \
 	whois
 

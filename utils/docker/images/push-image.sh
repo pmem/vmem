@@ -60,7 +60,7 @@ if [[ -z "${DOCKERHUB_REPO}" ]]; then
 	exit 1
 fi
 
-# Check if the image tagged with pmdk/OS-VER exists locally
+# Check if the image tagged with vmem/OS-VER exists locally
 if [[ ! $(docker images -a | awk -v pattern="^${DOCKERHUB_REPO}:1.7-$1\$" \
 	'$1":"$2 ~ pattern') ]]
 then
