@@ -1057,7 +1057,7 @@ if (-Not $Env:TYPE) { $Env:TYPE = 'check'}
 if (-Not $Env:BUILD) { $Env:BUILD = 'debug'}
 if (-Not $Env:CHECK_POOL) { $Env:CHECK_POOL = '0'}
 if (-Not $Env:EXESUFFIX) { $Env:EXESUFFIX = ".exe"}
-if (-Not $Env:SUFFIX) { $Env:SUFFIX = "😘⠏⠍⠙⠅ɗPMDKӜ⥺🙋"}
+if (-Not $Env:SUFFIX) { $Env:SUFFIX = "😕⠧⠍⠑⠍ɗVMEMӜ⥺🙍"}
 if (-Not $Env:DIRSUFFIX) { $Env:DIRSUFFIX = ""}
 
 if ($Env:BUILD -eq 'nondebug') {
