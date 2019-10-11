@@ -38,8 +38,6 @@
 . ../unittest/unittest.sh
 
 require_test_type medium
-
-require_fs_type none
 require_build_type debug nondebug
 # covered by TEST1
 configure_valgrind memcheck force-disable

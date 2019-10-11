@@ -42,8 +42,6 @@
 
 require_test_type medium
 
-require_fs_type any
-
 setup
 
 expect_normal_exit ./vmem_pages_purging$EXESUFFIX n $DIR

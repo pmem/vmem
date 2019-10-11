@@ -1141,28 +1141,9 @@ require_dax_device_alignments() {
 
 
 #
-# require_fs_type -- only allow script to continue for a certain fs type
-#
-function require_fs_type() {
-	req_fs_type=1
-	for type in $*
-	do
-		# treat any as either pmem or non-pmem
-		[ "$type" = "$FS" ] ||
-			([ -n "${FORCE_FS:+x}" ] && [ "$type" = "any" ] &&
-			[ "$FS" != "none" ]) && return
-	done
-	verbose_msg "$UNITTEST_NAME: SKIP fs-type $FS ($* required)"
-	exit 0
-}
-
-
-#
 # require_native_fallocate -- verify if filesystem supports fallocate
 #
 function require_native_fallocate() {
-	require_fs_type pmem non-pmem
-
 	set +e
 	$FALLOCATE_DETECT $1
 	status=$?
@@ -1198,25 +1179,6 @@ function require_usc_permission() {
 		msg "$UNITTEST_NAME: usc_permission_check failed"
 		exit 1
 	fi
-}
-
-#
-# require_fs_name -- verify if the $DIR is on the required file system
-#
-# Must be AFTER setup() because $DIR must exist
-#
-function require_fs_name() {
-	fsname=`df $DIR -PT | awk '{if (NR == 2) print $2}'`
-
-	for name in $*
-	do
-		if [ "$name" == "$fsname" ]; then
-			return
-		fi
-	done
-
-	msg "$UNITTEST_NAME: SKIP file system $fsname ($* required)"
-	exit 0
 }
 
 #
