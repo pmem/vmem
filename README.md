@@ -222,7 +222,7 @@ To build and run the **unit tests**:
 
 To run a specific **subset of tests**, run for example:
 ```
-	$ make check TEST_TYPE=short TEST_BUILD=debug TEST_FS=pmem
+	$ make check TEST_BUILD=debug
 ```
 
 To **modify the timeout** which is available for **check** type tests, run:

@@ -335,50 +335,32 @@ runtest() {
 			exit 1
 		}
 
-		fss=$(intersection "$fstype" "$req_fstype" "none pmem non-pmem any")
 		builds=$(intersection "$buildtype" "$req_buildtype" "debug nondebug static-debug static-nondebug")
 		provs=$(intersection "$provider" "$req_provider" "verbs sockets")
 		pmeths=$(intersection "$pmethod" "$req_pmethod" "GPSPM APM")
 
-		# for each fs-type being tested...
-		for fs in $fss
+		# for each build-type being tested...
+		for build in $builds
 		do
-			# don't bother trying when fs-type isn't available...
-			if [ "$fs" == "pmem" ] && [ -z "$PMEM_FS_DIR" ] && [ "$fstype" == "all" ]; then
-				pmem_skip=1
-				continue
+			export RUNTEST_DIR=$1
+			export RUNTEST_PARAMS="TEST=$ttype FS=$fs BUILD=$build"
+			export RUNTEST_EXTRA="CHECK_TYPE=$checktype CHECK_POOL=$check_pool \
+				$special_params"
+			export RUNTEST_SCRIPT="$runscript"
+			export RUNTEST_TIMEOUT="$req_timeout"
+
+			if [ "$KEEP_GOING" == "y" ] && [ "$CLEAN_FAILED" == "y" ]; then
+				# temporary file used for sharing data
+				# between RUNTESTS and tests processes
+				temp_loc=$(mktemp /tmp/data-location.XXXXXXXX)
+				export TEMP_LOC=$temp_loc
 			fi
 
-			if [ "$fs" == "non-pmem" ] && [ -z "$NON_PMEM_FS_DIR" ] && [ "$fstype" == "all" ]; then
-				non_pmem_skip=1
-				continue
+			# to not overwrite logs skip other tests from the group
+			# if KEEP_GOING=y and test fail
+			if [ "$keep_going_skip" == "n" ]; then
+				runtest_local
 			fi
-
-			if [ "$fs" == "any" ] && [ -z "$PMEM_FS_DIR" ] && [ -z "$NON_PMEM_FS_DIR" ] && [ "$fstype" == "all" ]; then
-				continue
-			fi
-			# for each build-type being tested...
-			for build in $builds
-			do
-				export RUNTEST_DIR=$1
-				export RUNTEST_PARAMS="TEST=$ttype FS=$fs BUILD=$build"
-				export RUNTEST_EXTRA="CHECK_TYPE=$checktype CHECK_POOL=$check_pool \
-					$special_params"
-				export RUNTEST_SCRIPT="$runscript"
-				export RUNTEST_TIMEOUT="$req_timeout"
-
-				if [ "$KEEP_GOING" == "y" ] && [ "$CLEAN_FAILED" == "y" ]; then
-					# temporary file used for sharing data
-					# between RUNTESTS and tests processes
-					temp_loc=$(mktemp /tmp/data-location.XXXXXXXX)
-					export TEMP_LOC=$temp_loc
-				fi
-				# to not overwrite logs skip other tests from the group
-				# if KEEP_GOING=y and test fail
-				if [ "$keep_going_skip" == "n" ]; then
-					runtest_local
-				fi
-			done
 		done
 		keep_going_skip=n
 	done
@@ -427,21 +409,14 @@ verbose_tests=
 # (placed e.g. in testconfig.sh)
 #
 [ -n "$TEST_BUILD" ] && def_buildtype=$TEST_BUILD
-[ -n "$TEST_TYPE" ] && testtype=$TEST_TYPE
-[ -n "$TEST_FS" ] && fstype=$TEST_FS
 [ -n "$TEST_TIMEOUT" ] && runtest_timeout=$TEST_TIMEOUT
 [ -n "$TEST_PROVIDERS" ] && provider=$TEST_PROVIDERS
 [ -n "$TEST_PMETHODS" ] && pmethod=$TEST_PMETHODS
 [ -n "$KEEP_GOING" ] && keep_going=$KEEP_GOING
 [ -n "$VERBOSE_TESTS" ] && verbose_tests="$VERBOSE_TESTS"
 
-if [ -v PMEM_FS_DIR ] && [ ! -d "$PMEM_FS_DIR" ]; then
-	echo "error: PMEM_FS_DIR=$PMEM_FS_DIR doesn't exist"
-	exit 1
-fi
-
-if [ -v NON_PMEM_FS_DIR ] && [ ! -d "$NON_PMEM_FS_DIR" ]; then
-	echo "error: NON_PMEM_FS_DIR=$NON_PMEM_FS_DIR doesn't exist"
+if [ ! -d "$TEST_DIR" ]; then
+	echo "error: TEST_DIR=$TEST_DIR doesn't exist"
 	exit 1
 fi
 
@@ -719,9 +694,6 @@ else
 		runtest $testdir
 	done
 fi
-
-[ "$pmem_skip" ] && echo "SKIPPED fs-type \"pmem\" runs: testconfig.sh doesn't set PMEM_FS_DIR"
-[ "$non_pmem_skip" ] && echo "SKIPPED fs-type \"non-pmem\" runs: testconfig.sh doesn't set NON_PMEM_FS_DIR"
 
 if [ "$fail_count" != "0" ]; then
 	echo "$(tput setaf 1)$fail_count tests failed:$(tput sgr0)"
