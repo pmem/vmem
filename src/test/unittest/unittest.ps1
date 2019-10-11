@@ -629,10 +629,8 @@ function pass {
         }
     }
 
-    if ($Env:FS -ne "none") {
-        if (isDir $DIR) {
-             rm -Force -Recurse $DIR
-        }
+    if (isDir $DIR) {
+         rm -Force -Recurse $DIR
     }
 
     msg ""
@@ -978,31 +976,13 @@ function setup {
     $Script:DIR = $DIR + "\" + $Env:DIRSUFFIX + "\" + $curtestdir + $Env:UNITTEST_NUM + $Env:SUFFIX
 
 
-    # fs type "none" must be explicitly enabled
-    if ($Env:FS -eq "none" -and $Global:req_fs_type -ne "1") {
-        exit 0
-    }
-
-    # fs type "any" must be explicitly enabled
-    if ($Env:FS -eq "any" -and $Global:req_fs_type -ne "1") {
-        exit 0
-    }
-
-    msg "${Env:UNITTEST_NAME}: SETUP ($Env:TYPE\$Global:REAL_FS\$Env:BUILD)"
+    msg "${Env:UNITTEST_NAME}: SETUP ($Env:TYPE\$Global\$Env:BUILD)"
 
     foreach ($f in $(get_files "[a-zA-Z_]*${Env:UNITTEST_NUM}\.log$")) {
         Remove-Item $f
     }
 
     rm -Force check_pool_${Env:BUILD}_${Env:UNITTEST_NUM}.log -ErrorAction SilentlyContinue
-
-    if ($Env:FS -ne "none") {
-
-        if (isDir $DIR) {
-             rm -Force -Recurse $DIR
-        }
-        md -force $DIR > $null
-    }
 
     # XXX: do it before setup() is invoked
     # set console encoding to UTF-8
@@ -1069,7 +1049,6 @@ if (-Not $Env:UNITTEST_NAME) {
 
 # defaults
 if (-Not $Env:TYPE) { $Env:TYPE = 'check'}
-if (-Not $Env:FS) { $Env:FS = 'any'}
 if (-Not $Env:BUILD) { $Env:BUILD = 'debug'}
 if (-Not $Env:CHECK_POOL) { $Env:CHECK_POOL = '0'}
 if (-Not $Env:EXESUFFIX) { $Env:EXESUFFIX = ".exe"}
@@ -1116,53 +1095,7 @@ if (-Not $Env:UNITTEST_NAME) {
     fatal "UNITTEST_NAME does not have a value"
 }
 
-$Global:REAL_FS = $Env:FS
-
-
-# choose based on FS env variable
-switch ($Env:FS) {
-    'pmem' {
-        # if a variable is set - it must point to a valid directory
-        if (-Not $Env:PMEM_FS_DIR) {
-            fatal "${Env:UNITTEST_NAME}: PMEM_FS_DIR not set"
-        }
-        sv -Name DIR $Env:PMEM_FS_DIR
-        if ($Env:PMEM_FS_DIR_FORCE_PMEM -eq "1") {
-            $Env:PMEM_IS_PMEM_FORCE = "1"
-        }
-    }
-    'non-pmem' {
-        # if a variable is set - it must point to a valid directory
-        if (-Not $Env:NON_PMEM_FS_DIR) {
-            fatal "${Env:UNITTEST_NAME}: NON_PMEM_FS_DIR not set"
-        }
-        sv -Name DIR $Env:NON_PMEM_FS_DIR
-    }
-    'any' {
-         if ($Env:PMEM_FS_DIR) {
-            sv -Name DIR ($Env:PMEM_FS_DIR + $tail)
-            $Global:REAL_FS='pmem'
-            if ($Env:PMEM_FS_DIR_FORCE_PMEM -eq "1") {
-                $Env:PMEM_IS_PMEM_FORCE = "1"
-            }
-        } ElseIf ($Env:NON_PMEM_FS_DIR) {
-            sv -Name DIR $Env:NON_PMEM_FS_DIR
-            $Global:REAL_FS='non-pmem'
-        } Else {
-            fatal "${Env:UNITTEST_NAME}: fs-type=any and both env vars are empty"
-        }
-    }
-    'none' {
-        # don't add long path nor unicode sufix to DIR
-        require_no_unicode
-        require_short_path
-        sv -Name DIR "\nul\not_existing_dir\"
-    }
-    default {
-        fatal "${Env:UNITTEST_NAME}: SKIP fs-type $Env:FS (not configured)"
-    }
-} # switch
-
+sv -Name DIR $Env:TEST_DIR
 
 # Length of pool file's signature
 sv -Name SIG_LEN 8

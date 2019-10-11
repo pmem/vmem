@@ -43,8 +43,6 @@ class Config {
     [bool] $check_pool
     [string] $skip_dir
     [Object[]] $testdir
-    [bool] $checkfs
-    [bool] $forcefs
     [string] $verbose
 
     #
@@ -66,38 +64,6 @@ class Config {
         } else {
             $this.timeout = [timespan]::FromSeconds($timeval)
         }
-    }
-
-    #
-    # setFstype -- parse fs-type
-    #
-    setFstype([string]$fstype) {
-        $fs ="none"
-        # don't bother trying when fs-type isn't available...
-        if ($Env:PMEM_FS_DIR) {
-            $fs += " pmem"
-        }
-
-        if ($Env:NON_PMEM_FS_DIR) {
-            $fs += " non-pmem"
-        }
-
-        if ($Env:NON_PMEM_FS_DIR -or $Env:PMEM_FS_DIR) {
-            $fs += " any"
-        }
-
-        if ($fstype -ne "all") {
-            #
-            # FS type was forced by user, necessary to treat
-            # "any" as either pmem or non-pmem with "-f"
-            #
-            $this.forcefs = $true
-            $this.fstype = $fstype
-        } else {
-            $this.fstype = $fs
-            $this.forcefs = $false
-        }
-
     }
 
     #
@@ -254,12 +220,6 @@ function runtest {
         $Env:UNITTEST_LOG_LEVEL = 1
     }
 
-    if ($config.forcefs) {
-        $Env:FORCE_FS= 1
-    } else {
-        $Env:FORCE_FS= 0
-    }
-
     if ($config.testfile -eq "all") {
         $dirCheck = ".\TEST*.ps1"
     } else {
@@ -351,16 +311,10 @@ and edit testconfig.ps1 to describe the local machine configuration.
 
 # need to manually clear variables, if definition of a variable was removed
 # from testconfig RUNTEST would use previously exported value
-$Env:PMEM_FS_DIR=""
-$Env:NON_PMEM_FS_DIR=""
-$Env:PMEM_IS_PMEM_FORCE=$null
+$Env:TEST_DIR=""
 
 . .\testconfig.ps1
 
-if ($Env:PMEM_FS_DIR -And (-Not (isDir($Env:PMEM_FS_DIR)))) {
-    throw "error: PMEM_FS_DIR=$Env:PMEM_FS_DIR doesn't exist"
-}
-
-if ($Env:NON_PMEM_FS_DIR -And (-Not (isDir($Env:NON_PMEM_FS_DIR)))) {
-    throw "error: NON_PMEM_FS_DIR=$Env:NON_PMEM_FS_DIR doesn't exist"
+if ($Env:TEST_DIR -And (-Not (isDir($Env:TEST_DIR)))) {
+    throw "error: TEST_DIR=$Env:TEST_DIR doesn't exist"
 }
