@@ -46,7 +46,6 @@ RUN dnf install -y \
 	asciidoctor \
 	autoconf \
 	automake \
-	bash-completion \
 	bc \
 	clang \
 	file \
