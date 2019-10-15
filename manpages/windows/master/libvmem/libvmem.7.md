@@ -3,11 +3,11 @@ layout: manual
 Content-Style: 'text/css'
 title: LIBVMEM
 collection: libvmem
-header: PMDK
+header: VMEM
 date: vmem API version 1.1
 ...
 
-[comment]: <> (Copyright 2016-2018, Intel Corporation)
+[comment]: <> (Copyright 2016-2019, Intel Corporation)
 
 [comment]: <> (Redistribution and use in source and binary forms, with or without)
 [comment]: <> (modification, are permitted provided that the following conditions)
@@ -60,7 +60,7 @@ cc ... -lvmem
 ```
 
 
->NOTE: The PMDK API supports UNICODE. If the **PMDK_UTF8_API** macro is
+>NOTE: The VMEM API supports UNICODE. If the **PMDK_UTF8_API** macro is
 defined, basic API functions are expanded to the UTF-8 API with postfix *U*.
 Otherwise they are expanded to the UNICODE API with postfix *W*.
 
@@ -109,6 +109,11 @@ depending on the file system containing the memory-mapped files.
 In particular, **libvmem** is part of the *Persistent Memory Development Kit*
 because it is sometimes useful to use non-volatile memory as a volatile memory
 pool, leveraging its capacity, cost, or performance characteristics.
+
+It is recommended that new code uses **memkind**(3) instead of **libvmem**, as
+this library is no longer actively developed and lacks certain features of
+**memkind** such as NUMA awareness.  Nevertheless, it is mature, and is
+expected to be maintained for foreseable future.
 
 **libvmem** uses the **mmap**(2) system call to create a pool of volatile
 memory. The library is most useful when used with *Direct Access* storage
@@ -283,7 +288,7 @@ main(int argc, char *argv[])
 }
 ```
 
-See <http://pmem.io/pmdk/libvmem> for more examples using the **libvmem** API.
+See <http://pmem.io/vmem/libvmem> for more examples using the **libvmem** API.
 
 
 # BUGS #

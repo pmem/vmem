@@ -3,11 +3,11 @@ layout: manual
 Content-Style: 'text/css'
 title: LIBVMEM
 collection: libvmem
-header: PMDK
+header: VMEM
 date: vmem API version 1.1
 ...
 
-[comment]: <> (Copyright 2016-2018, Intel Corporation)
+[comment]: <> (Copyright 2016-2019, Intel Corporation)
 
 [comment]: <> (Redistribution and use in source and binary forms, with or without)
 [comment]: <> (modification, are permitted provided that the following conditions)
@@ -102,6 +102,11 @@ depending on the file system containing the memory-mapped files.
 In particular, **libvmem** is part of the *Persistent Memory Development Kit*
 because it is sometimes useful to use non-volatile memory as a volatile memory
 pool, leveraging its capacity, cost, or performance characteristics.
+
+It is recommended that new code uses **memkind**(3) instead of **libvmem**, as
+this library is no longer actively developed and lacks certain features of
+**memkind** such as NUMA awareness.  Nevertheless, it is mature, and is
+expected to be maintained for foreseable future.
 
 **libvmem** uses the **mmap**(2) system call to create a pool of volatile
 memory. The library is most useful when used with *Direct Access* storage
@@ -200,9 +205,9 @@ Two versions of **libvmem** are typically available on a development
 system. The normal version is optimized for performance. That version skips
 checks that impact performance and never logs any trace information or
 performs any run-time assertions. A second version, accessed when using
-libraries from **/usr/lib/pmdk_debug**, contains run-time assertions and trace
+libraries from **/usr/lib/vmem_debug**, contains run-time assertions and trace
 points. The typical way to access the debug version is to set the
-**LD_LIBRARY_PATH** environment variable to **/usr/lib/pmdk_debug** or **/usr/lib64/pmdk_debug**, as appropriate. Debugging output is
+**LD_LIBRARY_PATH** environment variable to **/usr/lib/vmem_debug** or **/usr/lib64/vmem_debug**, as appropriate. Debugging output is
 controlled using the following environment variables. These variables have
 no effect on the non-debug version of the library.
 
@@ -276,7 +281,7 @@ main(int argc, char *argv[])
 }
 ```
 
-See <http://pmem.io/pmdk/libvmem> for more examples using the **libvmem** API.
+See <http://pmem.io/vmem/libvmem> for more examples using the **libvmem** API.
 
 
 # BUGS #
