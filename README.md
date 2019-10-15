@@ -1,5 +1,11 @@
 # **libvmem and libvmmalloc: malloc-like volatile allocations**
 
+[![Build Status](https://travis-ci.org/pmem/vmem.svg?branch=master)](https://travis-ci.org/pmem/vmem)
+[![Build status](https://ci.appveyor.com/api/projects/status/5ba870ralywix5dh/branch/master?svg=true&pr=false)](https://ci.appveyor.com/project/pmem/vmem/branch/master)
+[![Build status](https://api.cirrus-ci.com/github/pmem/vmem.svg)](https://cirrus-ci.com/github/pmem/vmem/master)
+[![Release version](https://img.shields.io/github/release/pmem/vmem.svg?sort=semver)](https://github.com/pmem/vmem/releases/latest)
+[![Coverage Status](https://codecov.io/github/pmem/vmem/coverage.svg?branch=master)](https://codecov.io/gh/pmem/vmem/branch/master)
+
 **libvmem** and **libvmmalloc** are a couple of libraries for
 using persistent memory for malloc-like volatile uses.  They have
 historically been a part of [PMDK](https://pmem.io/pmdk) despite being
