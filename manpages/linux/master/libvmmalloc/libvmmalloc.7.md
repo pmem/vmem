@@ -3,11 +3,11 @@ layout: manual
 Content-Style: 'text/css'
 title: LIBVMMALLOC
 collection: libvmmalloc
-header: PMDK
+header: VMEM
 date: vmmalloc API version 1.1
 ...
 
-[comment]: <> (Copyright 2016-2018, Intel Corporation)
+[comment]: <> (Copyright 2016-2019, Intel Corporation)
 
 [comment]: <> (Redistribution and use in source and binary forms, with or without)
 [comment]: <> (modification, are permitted provided that the following conditions)
@@ -105,6 +105,10 @@ attributes, depending on the file system containing the memory-mapped file.
 In particular, **libvmmalloc** is part of the *Persistent Memory Development Kit*
 because it is sometimes useful to use non-volatile memory as a volatile
 memory pool, leveraging its capacity, cost, or performance characteristics.
+
+This library is no longer actively developed, and is in maintenance mode,
+same as its underlying code backend (**libvmem**).  It is mature, and is
+expected to be supported for foreseable future.
 
 **libvmmalloc** may be also linked to the program, by providing the
 **-lvmmalloc* argument to the linker. Then it becomes the default memory
@@ -215,9 +219,9 @@ Two versions of **libvmmalloc** are typically available on a development
 system. The normal version is optimized for performance. That version skips
 checks that impact performance and never logs any trace information or
 performs any run-time assertions. A second version, accessed when using
-libraries from **/usr/lib/pmdk_debug**, contains run-time assertions and trace
+libraries from **/usr/lib/vmem_debug**, contains run-time assertions and trace
 points. The typical way to access the debug version is to set the
-**LD_LIBRARY_PATH** environment variable to **/usr/lib/pmdk_debug** or **/usr/lib64/pmdk_debug**, as appropriate. Debugging output is
+**LD_LIBRARY_PATH** environment variable to **/usr/lib/vmem_debug** or **/usr/lib64/vmem_debug**, as appropriate. Debugging output is
 controlled using the following environment variables. These variables have
 no effect on the non-debug version of the library.
 
