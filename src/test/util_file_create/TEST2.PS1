@@ -37,8 +37,6 @@
 
 . ..\unittest\unittest.ps1
 
-require_fs_type any
-require_test_type medium
 
 setup
 

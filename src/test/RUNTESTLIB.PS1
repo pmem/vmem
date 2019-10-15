@@ -36,15 +36,11 @@
 class Config {
     [bool] $dryrun
     [String] $buildtype
-    [String] $testtype
-    [String] $fstype
     [timespan] $timeout
     [string]$testfile
     [bool] $check_pool
     [string] $skip_dir
     [Object[]] $testdir
-    [bool] $checkfs
-    [bool] $forcefs
     [string] $verbose
 
     #
@@ -66,38 +62,6 @@ class Config {
         } else {
             $this.timeout = [timespan]::FromSeconds($timeval)
         }
-    }
-
-    #
-    # setFstype -- parse fs-type
-    #
-    setFstype([string]$fstype) {
-        $fs ="none"
-        # don't bother trying when fs-type isn't available...
-        if ($Env:PMEM_FS_DIR) {
-            $fs += " pmem"
-        }
-
-        if ($Env:NON_PMEM_FS_DIR) {
-            $fs += " non-pmem"
-        }
-
-        if ($Env:NON_PMEM_FS_DIR -or $Env:PMEM_FS_DIR) {
-            $fs += " any"
-        }
-
-        if ($fstype -ne "all") {
-            #
-            # FS type was forced by user, necessary to treat
-            # "any" as either pmem or non-pmem with "-f"
-            #
-            $this.forcefs = $true
-            $this.fstype = $fstype
-        } else {
-            $this.fstype = $fs
-            $this.forcefs = $false
-        }
-
     }
 
     #
@@ -133,7 +97,7 @@ Param (
    [String]$name = $(throw "Missing application name")
 )
 
-Write-Host "Usage: $name [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-type ]
+Write-Host "Usage: $name [ -hnv ] [ -b build-type ]
             [ -o timeout ] [ -s test-file ] [ -k skip-dir ]
             [ -c ] [ -i testdir ] [-j jobs]
     -h      print this help message
@@ -142,12 +106,7 @@ Write-Host "Usage: $name [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-typ
     -i test-dir run test(s) from this test directory (default is all)
     -b build-type   run only specified build type
             build-type: debug, nondebug, all (default)
-    -t test-type    run only specified test type
-            test-type: check (default), short, medium, long, all
-            where: check = short + medium; all = short + medium + long
     -k skip-dir skip a specific test directories (for >1 dir enclose in "" and separate with spaces)
-    -f fs-type  run tests only on specified file systems
-            fs-type: pmem, non-pmem, any, none, all (default)
     -o timeout  set timeout for test execution
             timeout: floating point number with an optional suffix: 's' for seconds
             (the default), 'm' for minutes, 'h' for hours or 'd' for days.
@@ -254,12 +213,6 @@ function runtest {
         $Env:UNITTEST_LOG_LEVEL = 1
     }
 
-    if ($config.forcefs) {
-        $Env:FORCE_FS= 1
-    } else {
-        $Env:FORCE_FS= 0
-    }
-
     if ($config.testfile -eq "all") {
         $dirCheck = ".\TEST*.ps1"
     } else {
@@ -283,54 +236,48 @@ function runtest {
 
         read_global_test_configuration
 
-        Foreach ($fs in $config.fstype.split(" ").trim()) {
-            Write-Verbose "RUNTESTS: Testing fs-type: $fs..."
-            # for each build-type being tested...
-            Foreach ($build in $config.buildtype.split(" ").trim()) {
-                Write-Verbose "RUNTESTS: Testing build-type: $build..."
+        Foreach ($build in $config.buildtype.split(" ").trim()) {
+            Write-Verbose "RUNTESTS: Testing build-type: $build..."
 
-                $Env:CHECK_POOL = $config.check_pool
-                $Env:TYPE = $config.testtype
-                $Env:FS = $fs
-                $Env:BUILD = $build
-                $Env:EXE_DIR = $(get_build_dirs $build)[0]
-                $Env:EXAMPLES_DIR = $(get_build_dirs $build)[1]
+            $Env:CHECK_POOL = $config.check_pool
+            $Env:BUILD = $build
+            $Env:EXE_DIR = $(get_build_dirs $build)[0]
+            $Env:EXAMPLES_DIR = $(get_build_dirs $build)[1]
 
-                if ($Env:BUILD -eq 'nondebug') {
-                    if (-Not $Env:PMDK_LIB_PATH_NONDEBUG) {
-                        $Env:LIBS_DIR = $(get_build_dirs $build)[2]
-                    } else {
-                        $Env:LIBS_DIR = $Env:PMDK_LIB_PATH_NONDEBUG
-                    }
-                } elseif ($Env:BUILD -eq 'debug') {
-                    if (-Not $Env:PMDK_LIB_PATH_DEBUG) {
-                        $Env:LIBS_DIR = $(get_build_dirs $build)[2]
-                    } else {
-                        $Env:LIBS_DIR = $Env:PMDK_LIB_PATH_DEBUG
-                    }
+            if ($Env:BUILD -eq 'nondebug') {
+                if (-Not $Env:PMDK_LIB_PATH_NONDEBUG) {
+                    $Env:LIBS_DIR = $(get_build_dirs $build)[2]
+                } else {
+                    $Env:LIBS_DIR = $Env:PMDK_LIB_PATH_NONDEBUG
                 }
-
-                if ($dryrun -eq "1") {
-                    Write-Host "(in ./$testName) TEST=$testtype FS=$fs BUILD=$build .\$runscript"
-                    continue
+            } elseif ($Env:BUILD -eq 'debug') {
+                if (-Not $Env:PMDK_LIB_PATH_DEBUG) {
+                    $Env:LIBS_DIR = $(get_build_dirs $build)[2]
+                } else {
+                    $Env:LIBS_DIR = $Env:PMDK_LIB_PATH_DEBUG
                 }
+            }
 
-                $save = save_env_variables
+            if ($dryrun -eq "1") {
+                Write-Host "(in ./$testName) BUILD=$build .\$runscript"
+                continue
+            }
 
-                # run test
-                Invoke-Expression ./$runscript
-                $ret = $?
+            $save = save_env_variables
 
-                # reset timeout timer
-                New-Event -SourceIdentifier "timeout-reset" | out-null
+            # run test
+            Invoke-Expression ./$runscript
+            $ret = $?
 
-                restore_env_variables($save)
+            # reset timeout timer
+            New-Event -SourceIdentifier "timeout-reset" | out-null
 
-                if (-not $ret) {
-                    throw "RUNTESTS: stopping: $testName/$runscript FAILED TEST=$testtype FS=$fs BUILD=$build"
-                }
-            } # for builds
-        } # for fss
+            restore_env_variables($save)
+
+            if (-not $ret) {
+                throw "RUNTESTS: stopping: $testName/$runscript FAILED BUILD=$build"
+            }
+        } # for builds
     } # for runscripts
 }
 
@@ -351,16 +298,10 @@ and edit testconfig.ps1 to describe the local machine configuration.
 
 # need to manually clear variables, if definition of a variable was removed
 # from testconfig RUNTEST would use previously exported value
-$Env:PMEM_FS_DIR=""
-$Env:NON_PMEM_FS_DIR=""
-$Env:PMEM_IS_PMEM_FORCE=$null
+$Env:TEST_DIR=""
 
 . .\testconfig.ps1
 
-if ($Env:PMEM_FS_DIR -And (-Not (isDir($Env:PMEM_FS_DIR)))) {
-    throw "error: PMEM_FS_DIR=$Env:PMEM_FS_DIR doesn't exist"
-}
-
-if ($Env:NON_PMEM_FS_DIR -And (-Not (isDir($Env:NON_PMEM_FS_DIR)))) {
-    throw "error: NON_PMEM_FS_DIR=$Env:NON_PMEM_FS_DIR doesn't exist"
+if ($Env:TEST_DIR -And (-Not (isDir($Env:TEST_DIR)))) {
+    throw "error: TEST_DIR=$Env:TEST_DIR doesn't exist"
 }

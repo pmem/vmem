@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018, Intel Corporation
+ * Copyright 2015-2019, Intel Corporation
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -102,6 +102,7 @@ main(int argc, char *argv[])
 	print_errors("start");
 
 	VMEM *vmp = vmem_create(argv[1], VMEM_MIN_POOL);
+	UT_ASSERT(vmp);
 
 	vmem_check_version(10005, 0);
 	print_errors("version check");

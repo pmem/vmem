@@ -37,9 +37,6 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
-
-require_fs_type none
 configure_valgrind memcheck force-disable
 
 setup

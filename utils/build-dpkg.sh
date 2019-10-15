@@ -158,10 +158,8 @@ override_dh_auto_test:
 	if [ -n "$TEST_CONFIG_FILE" -a -f "$TEST_CONFIG_FILE" ]; then\
 		cp "$TEST_CONFIG_FILE" src/test/testconfig.sh;\
 	else\
-		echo 'PMEM_FS_DIR=/tmp' > src/test/testconfig.sh; \
-		echo 'PMEM_FS_DIR_FORCE_PMEM=1' >> src/test/testconfig.sh; \
+		echo 'TEST_DIR=/tmp' > src/test/testconfig.sh; \
 		echo 'TEST_BUILD=\"debug nondebug\"' >> src/test/testconfig.sh; \
-		echo 'TEST_FS=\"pmem any none\"' >> src/test/testconfig.sh; \
 	fi
 	make pcheck ${PCHECK_OPTS}
 "

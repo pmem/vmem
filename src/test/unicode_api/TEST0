@@ -38,10 +38,7 @@
 
 . ../unittest/unittest.sh
 
-require_test_type medium
 require_command bc
-
-require_fs_type any
 # there's no point in testing different builds
 require_build_type debug
 require_command clang

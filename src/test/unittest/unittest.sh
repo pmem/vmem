@@ -104,12 +104,11 @@ fi
 [ "$UNITTEST_LOG_LEVEL" ] || UNITTEST_LOG_LEVEL=2
 [ "$GREP" ] || GREP="grep -a"
 [ "$TEST" ] || TEST=check
-[ "$FS" ] || FS=any
 [ "$BUILD" ] || BUILD=debug
 [ "$CHECK_TYPE" ] || CHECK_TYPE=auto
 [ "$CHECK_POOL" ] || CHECK_POOL=0
 [ "$VERBOSE" ] || VERBOSE=0
-[ -n "${SUFFIX+x}" ] || SUFFIX="😘⠏⠍⠙⠅ɗPMDKӜ⥺🙋"
+[ -n "${SUFFIX+x}" ] || SUFFIX="😕⠧⠍⠑⠍ɗVMEMӜ⥺🙍"
 
 export UNITTEST_LOG_LEVEL GREP TEST FS BUILD CHECK_TYPE CHECK_POOL VERBOSE SUFFIX
 
@@ -236,51 +235,14 @@ if [ ! "$UNITTEST_NAME" ]; then
 	fatal "UNITTEST_NAME does not have a value"
 fi
 
-REAL_FS=$FS
 if [ "$DIR" ]; then
 	DIR=$DIR/$curtestdir$UNITTEST_NUM
 else
-	case "$FS"
-	in
-	pmem)
-		# if a variable is set - it must point to a valid directory
-		if [ "$PMEM_FS_DIR" == "" ]; then
-			fatal "$UNITTEST_NAME: PMEM_FS_DIR is not set"
-		fi
-		DIR=$PMEM_FS_DIR/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
-		if [ "$PMEM_FS_DIR_FORCE_PMEM" = "1" ] || [ "$PMEM_FS_DIR_FORCE_PMEM" = "2" ]; then
-			export PMEM_IS_PMEM_FORCE=1
-		fi
-		;;
-	non-pmem)
-		# if a variable is set - it must point to a valid directory
-		if [ "$NON_PMEM_FS_DIR" == "" ]; then
-			fatal "$UNITTEST_NAME: NON_PMEM_FS_DIR is not set"
-		fi
-		DIR=$NON_PMEM_FS_DIR/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
-		;;
-	any)
-		if [ "$PMEM_FS_DIR" != "" ]; then
-			DIR=$PMEM_FS_DIR/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
-			REAL_FS=pmem
-			if [ "$PMEM_FS_DIR_FORCE_PMEM" = "1" ] || [ "$PMEM_FS_DIR_FORCE_PMEM" = "2" ]; then
-				export PMEM_IS_PMEM_FORCE=1
-			fi
-		elif [ "$NON_PMEM_FS_DIR" != "" ]; then
-			DIR=$NON_PMEM_FS_DIR/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
-			REAL_FS=non-pmem
-		else
-			fatal "$UNITTEST_NAME: fs-type=any and both env vars are empty"
-		fi
-		;;
-	none)
-		DIR=/dev/null/not_existing_dir/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
-		;;
-	*)
-		verbose_msg "$UNITTEST_NAME: SKIP fs-type $FS (not configured)"
-		exit 0
-		;;
-	esac
+	# if a variable is set - it must point to a valid directory
+	if [ "$TEST_DIR" == "" ]; then
+		fatal "$UNITTEST_NAME: TEST_DIR is not set"
+	fi
+	DIR=$TEST_DIR/$DIRSUFFIX/$curtestdir$UNITTEST_NUM
 fi
 
 #
@@ -1013,32 +975,6 @@ function require_x86_64() {
 }
 
 #
-# require_test_type -- only allow script to continue for a certain test type
-#
-function require_test_type() {
-	req_test_type=1
-	for type in $*
-	do
-		case "$TEST"
-		in
-		all)
-			# "all" is a synonym of "short + medium + long"
-			return
-			;;
-		check)
-			# "check" is a synonym of "short + medium"
-			[ "$type" = "short" -o "$type" = "medium" ] && return
-			;;
-		*)
-			[ "$type" = "$TEST" ] && return
-			;;
-		esac
-	done
-	verbose_msg "$UNITTEST_NAME: SKIP test-type $TEST ($* required)"
-	exit 0
-}
-
-#
 # dax_device_zero -- zero all local dax devices
 #
 dax_device_zero() {
@@ -1141,28 +1077,9 @@ require_dax_device_alignments() {
 
 
 #
-# require_fs_type -- only allow script to continue for a certain fs type
-#
-function require_fs_type() {
-	req_fs_type=1
-	for type in $*
-	do
-		# treat any as either pmem or non-pmem
-		[ "$type" = "$FS" ] ||
-			([ -n "${FORCE_FS:+x}" ] && [ "$type" = "any" ] &&
-			[ "$FS" != "none" ]) && return
-	done
-	verbose_msg "$UNITTEST_NAME: SKIP fs-type $FS ($* required)"
-	exit 0
-}
-
-
-#
 # require_native_fallocate -- verify if filesystem supports fallocate
 #
 function require_native_fallocate() {
-	require_fs_type pmem non-pmem
-
 	set +e
 	$FALLOCATE_DETECT $1
 	status=$?
@@ -1198,25 +1115,6 @@ function require_usc_permission() {
 		msg "$UNITTEST_NAME: usc_permission_check failed"
 		exit 1
 	fi
-}
-
-#
-# require_fs_name -- verify if the $DIR is on the required file system
-#
-# Must be AFTER setup() because $DIR must exist
-#
-function require_fs_name() {
-	fsname=`df $DIR -PT | awk '{if (NR == 2) print $2}'`
-
-	for name in $*
-	do
-		if [ "$name" == "$fsname" ]; then
-			return
-		fi
-	done
-
-	msg "$UNITTEST_NAME: SKIP file system $fsname ($* required)"
-	exit 0
 }
 
 #
@@ -1597,7 +1495,6 @@ function require_mmap_under_valgrind() {
 # setup -- print message that test setup is commencing
 #
 function setup() {
-
 	DIR=$DIR$SUFFIX
 	export VMMALLOC_POOL_DIR="$DIR"
 
@@ -1605,21 +1502,6 @@ function setup() {
 	# that allows read location of data after test failure
 	if [ -f "$TEMP_LOC" ]; then
 		echo "$DIR" > $TEMP_LOC
-	fi
-
-	# test type must be explicitly specified
-	if [ "$req_test_type" != "1" ]; then
-		fatal "error: required test type is not specified"
-	fi
-
-	# fs type "none" must be explicitly enabled
-	if [ "$FS" = "none" -a "$req_fs_type" != "1" ]; then
-		exit 0
-	fi
-
-	# fs type "any" must be explicitly enabled
-	if [ "$FS" = "any" -a "$req_fs_type" != "1" ]; then
-		exit 0
 	fi
 
 	if [ "$CHECK_TYPE" != "none" ]; then
@@ -1634,10 +1516,7 @@ function setup() {
 		MCSTR=""
 	fi
 
-	[ -n "$RPMEM_PROVIDER" ] && PROV="/$RPMEM_PROVIDER"
-	[ -n "$RPMEM_PM" ] && PM="/$RPMEM_PM"
-
-	msg "$UNITTEST_NAME: SETUP ($TEST/$REAL_FS/$BUILD$MCSTR$PROV$PM)"
+	msg "$UNITTEST_NAME: SETUP ($TEST/$BUILD$MCSTR)"
 
 	for f in $(get_files ".*[a-zA-Z_]${UNITTEST_NUM}\.log"); do
 		rm -f $f

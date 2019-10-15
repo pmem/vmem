@@ -10,8 +10,8 @@ memory, for example) and must be created by hand in each repo as it makes no
 sense to check in that configuration description to the main repo.
 
 testconfig.sh.example provides more detail.  The script RUNTESTS, when run with
-no arguments, will run all unit tests through all the combinations of fs-types
-and build-types, running the "check" level test.
+no arguments, will run all unit tests through all build-types, running the
+"check" level test.
 
 
 DETAILS ON HOW TO RUN UNIT TESTS
@@ -59,16 +59,12 @@ file system type, and build type to test.
 
 RUNTESTS takes options to limit what it runs.  The usage is:
 
- RUNTESTS [ -hnv ] [ -b build-type ] [ -t test-type ] [ -f fs-type ]
+ RUNTESTS [ -hnv ] [ -b build-type ]
 	    [ -o timeout ] [ -s test-file ] [ -k skip-dir ]
 	    [ -m memcheck ] [-p pmemcheck ] [ -e helgrind ] [ -d drd ] [ -c ]
-	    [ -q provider ] [ -r persistency-method ]
 	    [tests...]
 
  Build types are: debug, nondebug, static-debug, static-nondebug, all (default)
- Test types are: check (default), short, medium, long, all
-		 where: check = short + medium; all = short + medium + long
- File system types are: none, pmem, non-pmem, any, all (default)
  Timeout is: a floating point number with an optional suffix: 's' for seconds
 		 (the default), 'm' for minutes, 'h' for hours or 'd' for days.
 		 Default value is 3 minutes.
@@ -78,13 +74,11 @@ RUNTESTS takes options to limit what it runs.  The usage is:
 		 auto (default, enable/disable based on test requirements),
 		 force-enable (enable when test does not require given valgrind tool,
 		 but obey test's explicit tool disable)
- Providers are: verbs, sockets, all (default)
- Persistency methods are: GPSPM, APM, all (default)
 
 For example:
 
 	$ RUNTESTS -b debug blk_nblock -s TEST0
-	blk_nblock/TEST0: SETUP (check/pmem/debug)
+	blk_nblock/TEST0: SETUP (check/debug)
 	blk_nblock/TEST0: START: blk_nblock
 	blk_nblock/TEST0: PASS
 
@@ -99,17 +93,17 @@ an issue.  Just running the script, like this:
 
 will use default values for the environment, namely:
 
-	TEST=check FS=any BUILD=debug
+	BUILD=debug
 
 these defaults can be overridden on the command line:
 
 	$ cd blk_nblock
-	$ TEST=check FS=any BUILD=nondebug ./TEST0
+	$ BUILD=nondebug ./TEST0
 
 The above example runs TEST0 with the nondebug library, just as using
 RUNTESTS with "-b nondebug" would from the parent directory.
 
-In addition to overriding TEST, FS, and BUILD environment variables, the
+In addition to overriding BUILD environment variable, the
 unit test framework also looks for several other variables:
 
 	For tests that run a local program, insert the word "echo" in front
@@ -153,39 +147,12 @@ There are two ways of setting test requirements:
 	method. It can be used simultaneously with config.sh. Available require_*
 	utility functions are described below.
 
-If a test does not need any storage, the script uses this line:
-
-	require_fs_type none
-
-Similarly, if the test only makes sense for pmem or non-pmem:
-
-	require_fs_type pmem
-		or
-	require_fs_type non-pmem
-
-The above two are often combined to indicate the test should run once for pmem
-and once for non-pmem:
-
-	require_fs_type pmem non-pmem
-
-If the test requires some storage, but does not care whether it's pmem or not:
-
-	require_fs_type any
-
-If both pmem and non-pmem are available, "any" means "pmem".
-
-Similar to the above, tests can require a specific build types:
+Tests can require a specific build types:
 
 	require_build_type debug
 
 Most tests are short "make check" tests, designed to run quickly when
 smoke-checking a build.
-Three test types are available: short, medium and long.
-Each test script must use require_test_type to indicate to which group
-of tests it belongs to.  For example, if it should only run during a long
-test run, it can use this line:
-
-	require_test_type long
 
 Using the unittest library, the C programs run during unit testing get their
 output and tracing information logged to various files.  These are named with
@@ -195,7 +162,6 @@ produce:
 	err0.log	log of stderr
 	out0.log	log of stdout
 	trace0.log	trace points from unittest library
-	pmem0.log	trace from libpmem (PMEM_LOG_FILE points here)
 	vmem0.log	trace from libvmem (VMEM_LOG_FILE points here)
 
 Although the above log files are the common case, the TEST* scripts are free to

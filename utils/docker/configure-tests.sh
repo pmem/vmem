@@ -39,13 +39,9 @@ set -e
 
 # Configure tests
 cat << EOF > $WORKDIR/src/test/testconfig.sh
-LONGDIR=LoremipsumdolorsitametconsecteturadipiscingelitVivamuslacinianibhattortordictumsollicitudinNullamvariusvestibulumligulaetegestaselitsemperidMaurisultriciesligulaeuipsumtinciduntluctusMorbimaximusvariusdolorid
+LONGDIR=PhngluimglwnafhCthulhuRlyehwgahnaglfhtagnHaizhronaDagonhaiepngmnahnhriikadishtugnaiihcuhesyhahfgnaiihsgnwahlnogsgnwahlnghahaiChaugnarFaugnhlirghHshtungglingnogRlyehnghaogShub-NiggurathothhgofnnlloigshuggsllhannnCthulhuahnyth
 # this path is ~3000 characters long
 DIRSUFFIX="$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR/$LONGDIR"
-NON_PMEM_FS_DIR=/tmp
-PMEM_FS_DIR=/tmp
-PMEM_FS_DIR_FORCE_PMEM=1
-TEST_BUILD="debug nondebug"
-ENABLE_SUDO_TESTS=y
+TEST_DIR=/tmp
 TM=1
 EOF
