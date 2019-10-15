@@ -71,7 +71,7 @@ fi
 
 if [[ -z "$HOST_WORKDIR" ]]; then
 	echo "ERROR: The variable HOST_WORKDIR has to contain a path to " \
-		"the root of the PMDK project on the host machine"
+		"the root of the VMEM project on the host machine"
 	exit 1
 fi
 

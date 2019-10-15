@@ -1,9 +1,9 @@
 includedir=${prefix}/include
 
 Name: libvmem
-Description: libvmem library from PMDK project
+Description: libvmem library from VMEM project
 Version: ${version}
-URL: http://pmem.io/pmdk
+URL: http://pmem.io/vmem
 Requires:
 Libs: -L${libdir} -lvmem
 Cflags: -I${includedir}

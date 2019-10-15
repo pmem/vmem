@@ -262,7 +262,7 @@ util_getexecname(char *path, size_t pathlen)
 void
 util_suppress_errmsg(void)
 {
-	if (os_getenv("PMDK_NO_ABORT_MSG") != NULL) {
+	if (os_getenv("VMEM_NO_ABORT_MSG") != NULL) {
 		DWORD err = GetErrorMode();
 		SetErrorMode(err | SEM_NOGPFAULTERRORBOX |
 			SEM_FAILCRITICALERRORS);

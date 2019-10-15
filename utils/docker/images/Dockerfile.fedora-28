@@ -31,7 +31,7 @@
 
 #
 # Dockerfile - a 'recipe' for Docker to build an image of fedora-based
-#              environment for building the PMDK project.
+#              environment for building the VMEM project.
 #
 
 # Pull base image
@@ -50,26 +50,15 @@ RUN dnf install -y \
 	clang \
 	file \
 	findutils \
-	fuse \
-	fuse-devel \
 	gcc \
 	gdb \
 	git \
-	glib2-devel \
 	hub \
-	json-c-devel \
-	keyutils-libs-devel \
-	kmod-devel \
 	lbzip2 \
 	libtool \
-	libudev-devel \
 	libunwind-devel \
-	libuuid-devel \
-	libuv-devel \
 	make \
 	man \
-	ncurses-devel \
-	openssh-server \
 	pandoc \
 	passwd \
 	pkgconfig \
@@ -90,8 +79,8 @@ COPY install-valgrind.sh install-valgrind.sh
 RUN ./install-valgrind.sh
 
 # Add user
-ENV USER pmdkuser
-ENV USERPASS pmdkpass
+ENV USER vmemuser
+ENV USERPASS vmempass
 RUN useradd -m $USER
 RUN echo $USERPASS | passwd $USER --stdin
 RUN gpasswd wheel -a $USER

@@ -32,14 +32,14 @@
 
 #
 # build-local.sh - runs a Docker container from a Docker image with environment
-#                  prepared for building PMDK project and starts building PMDK
+#                  prepared for building VMEM project and starts building VMEM
 #
-# this script is for building PMDK locally (not on Travis)
+# this script is for building VMEM locally (not on Travis)
 #
 # Notes:
 # - run this script from its location or set the variable 'HOST_WORKDIR' to
-#   where the root of the PMDK project is on the host machine,
-# - set variables 'OS' and 'OS_VER' properly to a system you want to build PMDK
+#   where the root of the VMEM project is on the host machine,
+# - set variables 'OS' and 'OS_VER' properly to a system you want to build VMEM
 #   on (for proper values take a look on the list of Dockerfiles at the
 #   utils/docker/images directory), eg. OS=ubuntu, OS_VER=16.04.
 # - set 'KEEP_TEST_CONFIG' variable to 1 if you do not want the tests to be
@@ -58,12 +58,12 @@ export REMOTE_TESTS=${REMOTE_TESTS:-1}
 export MAKE_PKG=${MAKE_PKG:-0}
 export EXTRA_CFLAGS=${EXTRA_CFLAGS}
 export EXTRA_CXXFLAGS=${EXTRA_CXXFLAGS:-}
-export PMDK_CC=${PMDK_CC:-gcc}
-export PMDK_CXX=${PMDK_CXX:-g++}
+export VMEM_CC=${VMEM_CC:-gcc}
+export VMEM_CXX=${VMEM_CXX:-g++}
 export EXPERIMENTAL=${EXPERIMENTAL:-n}
 export VALGRIND=${VALGRIND:-1}
-export DOCKERHUB_REPO=${DOCKERHUB_REPO:-pmem/pmdk}
-export GITHUB_REPO=${GITHUB_REPO:-pmem/pmdk}
+export DOCKERHUB_REPO=${DOCKERHUB_REPO:-pmem/vmem}
+export GITHUB_REPO=${GITHUB_REPO:-pmem/vmem}
 
 if [[ -z "$OS" || -z "$OS_VER" ]]; then
 	echo "ERROR: The variables OS and OS_VER have to be set " \
@@ -80,7 +80,7 @@ if [[ "$KEEP_CONTAINER" != "1" ]]; then
 fi
 
 imageName=${DOCKERHUB_REPO}:1.7-${OS}-${OS_VER}
-containerName=pmdk-${OS}-${OS_VER}
+containerName=vmem-${OS}-${OS_VER}
 
 if [[ $MAKE_PKG -eq 1 ]] ; then
 	command="./run-build-package.sh"
@@ -90,22 +90,22 @@ fi
 
 if [ -n "$DNS_SERVER" ]; then DNS_SETTING=" --dns=$DNS_SERVER "; fi
 
-WORKDIR=/pmdk
+WORKDIR=/vmem
 SCRIPTSDIR=$WORKDIR/utils/docker
 
 echo Building ${OS}-${OS_VER}
 
 # Run a container with
 #  - environment variables set (--env)
-#  - host directory containing PMDK source mounted (-v)
+#  - host directory containing VMEM source mounted (-v)
 #  - working directory set (-w)
 docker run --privileged=true --name=$containerName -ti \
 	$RM_SETTING \
 	$DNS_SETTING \
 	--env http_proxy=$http_proxy \
 	--env https_proxy=$https_proxy \
-	--env CC=$PMDK_CC \
-	--env CXX=$PMDK_CXX \
+	--env CC=$VMEM_CC \
+	--env CXX=$VMEM_CXX \
 	--env VALGRIND=$VALGRIND \
 	--env EXTRA_CFLAGS=$EXTRA_CFLAGS \
 	--env EXTRA_CXXFLAGS=$EXTRA_CXXFLAGS \

@@ -32,7 +32,7 @@
 
 #
 # run-build.sh - is called inside a Docker container; prepares the environment
-#                and starts a build of PMDK project.
+#                and starts a build of VMEM project.
 #
 
 set -e
