@@ -134,7 +134,7 @@ pkg-clean:
 rpm dpkg: pkg-clean
 	$(MAKE) source DESTDIR="$(DESTDIR)"
 	+utils/build-$@.sh -t $(SRCVERSION) -s "$(DESTDIR)"/vmem -w "$(DESTDIR)" -o $(CURDIR)/$@\
-			-e $(EXPERIMENTAL) -c $(BUILD_PACKAGE_CHECK)
+			-e $(EXPERIMENTAL) -c $(BUILD_PACKAGE_CHECK)\
 			-f $(TEST_CONFIG_FILE)
 
 install uninstall:
