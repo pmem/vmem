@@ -1,11 +1,11 @@
-pmdk: Persistent Memory Development Kit
+vmem
 =================
 
-### pmem.io/pmdk web site
+### pmem.io/vmem web site
 
-This repo contains the jekyll-based web site for http://pmem.io/pmdk.
+This repo contains the jekyll-based web site for http://pmem.io/vmem.
 
-Please see the file [LICENSE](https://github.com/pmem/pmdk/blob/gh-pages/LICENSE)
+Please see the file [LICENSE](https://github.com/pmem/vmem/blob/gh-pages/LICENSE)
 for information on how the content of this site is licensed.
 
 Send questions or comments to [marcin.slusarz@intel.com](mailto:marcin.slusarz@intel.com)

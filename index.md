@@ -30,3 +30,6 @@ of persistent memory as volatile memory without modifying the target
 application.
 
 See the [libvmmalloc page](libvmmalloc) for documentation and examples.
+
+VMEM was a part of [PMDK repository](https://github.com/pmem/pmdk/).
+It was moved out after PMDK 1.7.
