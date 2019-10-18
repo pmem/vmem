@@ -1,11 +1,11 @@
-# C Style and Coding Standards for Persistent Memory Development Kit
+# C Style and Coding Standards for VMEM
 
 This document defines the coding standards and conventions for writing
 VMEM code. To ensure readability and consistency within the code,
 the contributed code must adhere to the rules below.
 
 ### Introduction
-The Persistent Memory Development Kit coding style is quite similar to the style
+VMEM coding style is quite similar to the style
 used for the SunOS product.
 A full description of that standard can be found
 [here.](https://www.cis.upenn.edu/~lee/06cse480/data/cstyle.ms.pdf)
