@@ -99,9 +99,6 @@ memory-mapped files. These interfaces are for traditional **volatile** memory
 allocation but, unlike the functions described in **malloc**(3),
 the memory managed by **libvmem** may have different attributes,
 depending on the file system containing the memory-mapped files.
-In particular, **libvmem** is part of the *Persistent Memory Development Kit*
-because it is sometimes useful to use non-volatile memory as a volatile memory
-pool, leveraging its capacity, cost, or performance characteristics.
 
 It is recommended that new code uses **memkind**(3) instead of **libvmem**, as
 this library is no longer actively developed and lacks certain features of
