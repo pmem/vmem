@@ -1,5 +1,5 @@
-??? ??? ?? ????
-	* Version 1.8
+Fri Oct 18 2019 Marcin Ślusarz <marcin.slusarz@intel.com>
+	* Version 1.8-rc1
 
 	This is a first release of vmem as separate project from PMDK.
 
