@@ -1964,29 +1964,6 @@ function require_pmemcheck_version_lt()
 }
 
 #
-# require_python_3 -- check if python3 is available
-#
-function require_python3()
-{
-	if hash python3 &>/dev/null;
-	then
-		PYTHON_EXE=python3
-	else
-		PYTHON_EXE=python
-	fi
-
-	case "$($PYTHON_EXE --version 2>&1)" in
-	    *" 3."*)
-		return
-		;;
-	    *)
-		msg "$UNITTEST_NAME: SKIP: required python version 3"
-		exit 0
-		;;
-	esac
-}
-
-#
 # require_free_space -- check if there is enough free space to run the test
 # Example, checking if there is 1 GB of free space on disk:
 # require_free_space 1G

@@ -62,8 +62,7 @@ ENV DOC_DEPS pandoc
 # tests
 ENV TESTS_DEPS "bc \
 	libc6-dbg \
-	libunwind-dev \
-	python3"
+	libunwind-dev"
 
 # packaging
 ENV PACKAGING_DEPS "debhelper \
