@@ -1736,6 +1736,15 @@ pool_open(pool_t *pool, size_t size, unsigned pool_id)
 	pools[pool_id] = pool;
 	npools_cnt++;
 
+	unsigned i;
+	for (i = 0; i < pool->narenas_total; ++i) {
+		arena_t *arena = pool->arenas[i];
+		if (arena != NULL) {
+			arena->chunk_alloc = chunk_alloc_default;
+			arena->chunk_dalloc = chunk_dalloc_default;
+		}
+	}
+
 	return pool;
 }
 
