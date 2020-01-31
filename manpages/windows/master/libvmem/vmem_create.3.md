@@ -3,7 +3,7 @@ layout: manual
 Content-Style: 'text/css'
 title: VMEM_CREATE
 collection: libvmem
-header: PMDK
+header: VMEM
 date: vmem API version 1.1
 ...
 
@@ -63,7 +63,7 @@ void vmem_stats_print(VMEM *vmp, const char *opts);
 ```
 
 
->NOTE: The PMDK API supports UNICODE. If the **PMDK_UTF8_API** macro is
+>NOTE: The VMEM API supports UNICODE. If the **PMDK_UTF8_API** macro is
 defined, basic API functions are expanded to the UTF-8 API with postfix *U*.
 Otherwise they are expanded to the UNICODE API with postfix *W*.
 
