@@ -3,7 +3,7 @@ layout: manual
 Content-Style: 'text/css'
 title: VMEM_MALLOC
 collection: libvmem
-header: PMDK
+header: VMEM
 date: vmem API version 1.1
 ...
 
