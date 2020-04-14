@@ -1,5 +1,5 @@
 #
-# Copyright 2014-2019, Intel Corporation
+# Copyright 2014-2020, Intel Corporation
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
 PACKAGE_NAME="vmem"
 
 # Name and email of package maintainer
-PACKAGE_MAINTAINER="Marcin Slusarz <marcin.slusarz@intel.com>"
+PACKAGE_MAINTAINER="Piotr Balcer <piotr.balcer@intel.com>"
 
 # Brief description of the package
 PACKAGE_SUMMARY="Volatile Persistent Memory Allocator"
