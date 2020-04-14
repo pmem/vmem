@@ -36,7 +36,7 @@
 
 # Pull base image
 FROM ubuntu:18.04
-MAINTAINER marcin.slusarz@intel.com
+MAINTAINER piotr.balcer@intel.com
 
 ENV DEBIAN_FRONTEND noninteractive
 

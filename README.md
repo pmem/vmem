@@ -312,6 +312,6 @@ libraries, but they have received no real testing outside of 64-bit x86.
 ## Contact Us
 
 For more information on this library, contact
-Marcin Slusarz (marcin.slusarz@intel.com),
+Piotr Balcer (piotr.balcer@intel.com),
 Andy Rudoff (andy.rudoff@intel.com), or post to our
 [Google group](http://groups.google.com/group/pmem).

@@ -33,7 +33,7 @@
 PACKAGE_NAME="vmem"
 
 # Name and email of package maintainer
-PACKAGE_MAINTAINER="Marcin Slusarz <marcin.slusarz@intel.com>"
+PACKAGE_MAINTAINER="Piotr Balcer <piotr.balcer@intel.com>"
 
 # Brief description of the package
 PACKAGE_SUMMARY="Volatile Persistent Memory Allocator"
