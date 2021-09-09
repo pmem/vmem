@@ -13,7 +13,15 @@ solely for volatile uses.
 
 Both of these libraries are considered code-complete and mature.  You may
 want consider using [memkind](https://github.com/memkind/memkind) instead
-in code that benefits from extra features like NUMA awareness.
+in code that benefits from extra features like NUMA awareness.  Since
+memkind version 1.12, it includes "**memtier**" which can be used as a
+`LD_PRELOAD` interposer to unmodified binaries — thus reaching feature
+parity with vmmalloc on Linux.
+
+For the above reason, we decided to not do the work of adapting vmem to
+glibc 2.34 memory allocation changes.  On the other hand, there are
+Linux distributions based on glibc ≤2.33 supported well into 2030s, and
+memkind supports neither FreeBSD nor Windows
 
 To install vmem libraries, either install pre-built packages, which we build
 for every stable release, or clone the tree and build it yourself.
@@ -90,6 +98,7 @@ You will need to install the following required packages on the build system:
 
 * **autoconf**
 * **pkg-config**
+* **glibc** ≤ 2.33
 
 ### Windows
 
