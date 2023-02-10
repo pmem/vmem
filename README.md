@@ -6,6 +6,17 @@
 [![Release version](https://img.shields.io/github/release/pmem/vmem.svg?sort=semver)](https://github.com/pmem/vmem/releases/latest)
 [![Coverage Status](https://codecov.io/github/pmem/vmem/coverage.svg?branch=master)](https://codecov.io/gh/pmem/vmem/branch/master)
 
+## ⚠️ Discontinuation of the project
+The **libvmem** and **libvmmalloc** libraries will no longer be maintained by Intel.
+- Intel has ceased development and contributions including, but not limited to, maintenance, bug fixes, new releases,
+or updates, to this project.
+- Intel no longer accepts patches to this project.
+- If you have an ongoing need to use this project, are interested in independently developing it, or would like to
+maintain patches for the open source software community, please create your own fork of this project.
+- You will find more information [here](https://pmem.io/blog/2022/11/update-on-pmdk-and-our-long-term-support-strategy/).
+
+## Introduction
+
 **libvmem** and **libvmmalloc** are a couple of libraries for
 using persistent memory for malloc-like volatile uses.  They have
 historically been a part of [PMDK](https://pmem.io/pmdk) despite being
@@ -27,7 +38,7 @@ To install vmem libraries, either install pre-built packages, which we build
 for every stable release, or clone the tree and build it yourself.
 **Pre-built** packages can be found in popular Linux distribution package
 repositories, or you can check out our recent stable releases on our [github
-release page](https://github.com/pmem/vmem/releases).  Specific installation
+release page](https://github.com/pmem/vmem/releases). Specific installation
 instructions are outlined below.
 
 ## Contents
@@ -320,7 +331,4 @@ libraries, but they have received no real testing outside of 64-bit x86.
 
 ## Contact Us
 
-For more information on this library, contact
-Piotr Balcer (piotr.balcer@intel.com),
-Andy Rudoff (andy.rudoff@intel.com), or post to our
-[Google group](http://groups.google.com/group/pmem).
+If you read the [blog post](https://pmem.io/blog/2022/11/update-on-pmdk-and-our-long-term-support-strategy/) and still have some questions (especially about discontinuation of the project), please contact us using the dedicated e-mail: pmdk_support@intel.com.
